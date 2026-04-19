@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { auth } from '@/lib/auth/auth'
 import { db } from '@/database'
 import * as schema from '@/database/schema'
-import { searchAndBookFlight } from '@/lib/fare-fold/service'
+import { searchAndBookFlight, startPriceSimulator } from '@/lib/fare-fold/service'
 import { mockDb } from '@/lib/fare-fold/mock-db'
 
 const IS_MOCK_MODE = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true'
@@ -81,6 +81,9 @@ export async function POST(request: Request) {
             currency: result.flightOffer.price.currency,
             status: 'active',
           });
+
+          // Start Price Simulator for the demo
+          startPriceSimulator(newTrackedFlight.id, result.flightOffer.price.total)
         }
 
         return NextResponse.json({ 

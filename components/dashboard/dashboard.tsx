@@ -15,7 +15,7 @@ import {
   AutocompleteEmpty 
 } from '@/components/ui/autocomplete'
 import { format } from 'date-fns'
-import { Calendar as CalendarIcon, Loader2, PlaneTakeoff, PlaneLanding } from 'lucide-react'
+import { Calendar as CalendarIcon, Loader2, PlaneTakeoff, PlaneLanding, History, TrendingDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export function Dashboard() {
@@ -51,22 +51,27 @@ export function Dashboard() {
 
   useEffect(() => {
     fetchTrackedFlights()
+    
+    // Poll for updates every 5 seconds to see the simulator in action
+    const interval = setInterval(fetchTrackedFlights, 5000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
-    // Basic savings calculation: (original price - current price)
-    // For now, since we only show the 'active' booking price, 
-    // we'll just mock a logic or sum up specific values if available.
-    // Assuming trackedFlights[i].bookings[0].price exists.
     const savings = trackedFlights.reduce((acc, flight) => {
-      // In a real app, you'd compare original price to current price
-      // For this demo, let's just show a positive number if we have bookings
-      if (flight.bookings && flight.bookings.length > 0) {
-        return acc + Math.floor(Math.random() * 50) // Mock savings for demo
+      if (flight.bookings && flight.bookings.length > 1) {
+        const initialBooking = flight.bookings.find((b: any) => b.createdAt === Math.min(...flight.bookings.map((bb: any) => new Date(bb.createdAt).getTime()))) 
+        // Simpler: find first and last active
+        const sortedBookings = [...flight.bookings].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        const firstPrice = parseFloat(sortedBookings[0].price);
+        const activeBooking = flight.bookings.find((b: any) => b.status === 'active');
+        const currentPrice = activeBooking ? parseFloat(activeBooking.price) : firstPrice;
+        
+        return acc + Math.max(0, firstPrice - currentPrice);
       }
       return acc
     }, 0)
-    setTotalSavings(savings)
+    setTotalSavings(parseFloat(savings.toFixed(2)))
   }, [trackedFlights])
 
   const searchAirports = async (query: string, setOptions: (opts: any[]) => void, setLoading: (l: boolean) => void) => {
@@ -145,6 +150,22 @@ export function Dashboard() {
     }
   }
 
+  const handleOriginChange = (val: string) => {
+    setOrigin(val)
+    const selected = originOptions.find((o) => o.iataCode === val)
+    if (selected) {
+      setOriginQuery(`${selected.iataCode} - ${selected.name}`)
+    }
+  }
+
+  const handleDestChange = (val: string) => {
+    setDestination(val)
+    const selected = destOptions.find((o) => o.iataCode === val)
+    if (selected) {
+      setDestQuery(`${selected.iataCode} - ${selected.name}`)
+    }
+  }
+
   return (
     <div className="container mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6 text-[#211b17]">Your Dashboard</h1>
@@ -157,7 +178,7 @@ export function Dashboard() {
           <form onSubmit={handleSearch} className="flex flex-col lg:flex-row gap-4 items-end">
             <div className="grid gap-2 w-full lg:w-auto flex-1">
               <label className="text-xs font-bold uppercase text-[#8f2f24]/80">Origin</label>
-              <Autocomplete value={origin} onValueChange={setOrigin}>
+              <Autocomplete value={origin} onValueChange={handleOriginChange}>
                 <AutocompleteInput 
                   placeholder="City or Airport" 
                   className="w-full border-[#ded3c5] focus-visible:ring-[#8f2f24]"
@@ -194,7 +215,7 @@ export function Dashboard() {
 
             <div className="grid gap-2 w-full lg:w-auto flex-1">
               <label className="text-xs font-bold uppercase text-[#8f2f24]/80">Destination</label>
-              <Autocomplete value={destination} onValueChange={setDestination}>
+              <Autocomplete value={destination} onValueChange={handleDestChange}>
                 <AutocompleteInput 
                   placeholder="City or Airport" 
                   className="w-full border-[#ded3c5] focus-visible:ring-[#8f2f24]"
@@ -329,7 +350,11 @@ export function Dashboard() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      {activeBooking ? (
+                      {flight.priceHistory && flight.priceHistory.length > 0 ? (
+                        <span className="font-bold text-[#8f2f24]">
+                          USD {flight.priceHistory[flight.priceHistory.length - 1].price}
+                        </span>
+                      ) : activeBooking ? (
                         <span className="font-bold text-[#8f2f24]">
                           {activeBooking.currency} {activeBooking.price}
                         </span>
@@ -338,9 +363,32 @@ export function Dashboard() {
                       )}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="outline" size="sm" className="border-[#ded3c5]">
-                        View Details
-                      </Button>
+                      <Popover>
+                        <PopoverTrigger render={
+                          <Button variant="outline" size="sm" className="border-[#ded3c5]">
+                            <History className="size-3 mr-1" />
+                            History
+                          </Button>
+                        } />
+                        <PopoverContent className="w-64 p-4 border-[#ded3c5] bg-[#fffdf8]">
+                          <h4 className="font-bold text-sm mb-2 flex items-center">
+                            <TrendingDown className="size-4 mr-2 text-[#246b50]" />
+                            Price History
+                          </h4>
+                          <div className="space-y-2">
+                            {flight.priceHistory && flight.priceHistory.length > 0 ? (
+                              flight.priceHistory.map((ph: any, i: number) => (
+                                <div key={ph.id} className="flex justify-between text-sm border-b border-[#ded3c5]/50 pb-1">
+                                  <span className="text-muted-foreground">{format(new Date(ph.timestamp), 'HH:mm:ss')}</span>
+                                  <span className="font-mono font-bold">${ph.price}</span>
+                                </div>
+                              ))
+                            ) : (
+                              <p className="text-xs text-muted-foreground italic">No history yet.</p>
+                            )}
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     </TableCell>
                   </TableRow>
                 )

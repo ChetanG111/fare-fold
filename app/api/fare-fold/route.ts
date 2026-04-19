@@ -4,12 +4,22 @@ import { auth } from '@/lib/auth/auth'
 import { db } from '@/database'
 import * as schema from '@/database/schema'
 import { searchAndBookFlight } from '@/lib/fare-fold/service'
+import { mockDb } from '@/lib/fare-fold/mock-db'
+
+const IS_MOCK_MODE = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true'
+
+async function getSession() {
+  if (IS_MOCK_MODE) {
+    return { user: { id: 'mock-user-123', email: 'mock@example.com', name: 'Mock User' } }
+  }
+  return await auth.api.getSession({
+    headers: await headers(),
+  })
+}
 
 export async function POST(request: Request) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await getSession()
 
     if (!session) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
@@ -25,32 +35,61 @@ export async function POST(request: Request) {
     const result = await searchAndBookFlight({ origin, destination, departureDate })
 
     if (result.success) {
-      // Save to database
-      const [newTrackedFlight] = await db.insert(schema.trackedFlight).values({
-        userId: session.user.id,
-        origin,
-        destination,
-        departureDate: new Date(departureDate),
-        status: 'tracking',
-      }).returning();
+      // Save to database (try real, fallback to mock)
+      try {
+        const [newTrackedFlight] = await db.insert(schema.trackedFlight).values({
+          userId: session.user.id,
+          origin,
+          destination,
+          departureDate: new Date(departureDate),
+          status: 'tracking',
+        }).returning();
 
-      if (result.flightOffer) {
-        await db.insert(schema.flightBooking).values({
-          trackedFlightId: newTrackedFlight.id,
-          airline: result.flightOffer.itineraries[0].segments[0].carrierCode,
-          flightNumber: result.flightOffer.itineraries[0].segments[0].number,
-          price: result.flightOffer.price.total,
-          currency: result.flightOffer.price.currency,
-          status: 'active',
+        if (result.flightOffer) {
+          await db.insert(schema.flightBooking).values({
+            trackedFlightId: newTrackedFlight.id,
+            airline: result.flightOffer.itineraries[0].segments[0].carrierCode,
+            flightNumber: result.flightOffer.itineraries[0].segments[0].number,
+            price: result.flightOffer.price.total,
+            currency: result.flightOffer.price.currency,
+            status: 'active',
+          });
+        }
+
+        return NextResponse.json({ 
+          message: 'Flight tracked successfully', 
+          bookingId: result.bookingId, 
+          flightOffer: result.flightOffer,
+          trackedFlightId: newTrackedFlight.id
+        })
+      } catch (dbError) {
+        console.warn('Database failed, using mock storage:', dbError)
+        const [newTrackedFlight] = await mockDb.trackedFlights.insert({
+          userId: session.user.id,
+          origin,
+          destination,
+          departureDate: new Date(departureDate).toISOString(),
+          status: 'tracking',
         });
-      }
 
-      return NextResponse.json({ 
-        message: 'Flight tracked successfully', 
-        bookingId: result.bookingId, 
-        flightOffer: result.flightOffer,
-        trackedFlightId: newTrackedFlight.id
-      })
+        if (result.flightOffer) {
+          await mockDb.bookings.insert({
+            trackedFlightId: newTrackedFlight.id,
+            airline: result.flightOffer.itineraries[0].segments[0].carrierCode,
+            flightNumber: result.flightOffer.itineraries[0].segments[0].number,
+            price: result.flightOffer.price.total,
+            currency: result.flightOffer.price.currency,
+            status: 'active',
+          });
+        }
+
+        return NextResponse.json({ 
+          message: 'Flight tracked successfully (Mock)', 
+          bookingId: result.bookingId, 
+          flightOffer: result.flightOffer,
+          trackedFlightId: newTrackedFlight.id
+        })
+      }
     } else {
       return NextResponse.json({ message: 'Failed to find/book flight', error: result.error }, { status: 500 })
     }
@@ -62,25 +101,30 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    })
+    const session = await getSession()
 
     if (!session) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    const trackedFlights = await db.query.trackedFlight.findMany({
-      where: (table, { eq }) => eq(table.userId, session.user.id),
-      with: {
-        bookings: {
-          where: (table, { eq }) => eq(table.status, 'active'),
+    // Try real DB first, fallback to Mock
+    try {
+      const trackedFlights = await db.query.trackedFlight.findMany({
+        where: (table, { eq }) => eq(table.userId, session.user.id),
+        with: {
+          bookings: {
+            where: (table, { eq }) => eq(table.status, 'active'),
+          },
         },
-      },
-      orderBy: (table, { desc }) => [desc(table.createdAt)],
-    });
+        orderBy: (table, { desc }) => [desc(table.createdAt)],
+      });
 
-    return NextResponse.json({ trackedFlights });
+      return NextResponse.json({ trackedFlights });
+    } catch (dbError) {
+      console.warn('Database failed, fetching from mock storage')
+      const trackedFlights = await mockDb.trackedFlights.findMany(session.user.id);
+      return NextResponse.json({ trackedFlights });
+    }
   } catch (error) {
     console.error('Error fetching tracked flights:', error);
     return NextResponse.json({ message: 'An unexpected error occurred' }, { status: 500 });

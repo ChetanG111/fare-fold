@@ -61,7 +61,7 @@ export function EmailFooter({ baseUrl = getBaseUrl(), unsubscribe, messageId }: 
                   <tbody>
                     <tr>
                       <td align='left' style={{ padding: '0 8px 0 0' }}>
-                        <Link href='https://x.com/elon_musk' rel='noopener noreferrer'>
+                        <Link href={baseUrl} rel='noopener noreferrer'>
                           <Img
                             src={`${baseUrl}/static/x-icon.png`}
                             width='20'
@@ -71,7 +71,7 @@ export function EmailFooter({ baseUrl = getBaseUrl(), unsubscribe, messageId }: 
                         </Link>
                       </td>
                       <td align='left' style={{ padding: '0 8px' }}>
-                        <Link href='https://discord.gg/g5wsxR2nXN' rel='noopener noreferrer'>
+                        <Link href={baseUrl} rel='noopener noreferrer'>
                           <Img
                             src={`${baseUrl}/static/discord-icon.png`}
                             width='20'
@@ -81,7 +81,7 @@ export function EmailFooter({ baseUrl = getBaseUrl(), unsubscribe, messageId }: 
                         </Link>
                       </td>
                       <td align='left' style={{ padding: '0 8px' }}>
-                        <Link href='https://github.com/kyronhq' rel='noopener noreferrer'>
+                        <Link href={baseUrl} rel='noopener noreferrer'>
                           <Img
                             src={`${baseUrl}/static/github-icon.png`}
                             width='20'
@@ -175,11 +175,11 @@ export function EmailFooter({ baseUrl = getBaseUrl(), unsubscribe, messageId }: 
                 <a href={`${baseUrl}/privacy`} style={footerLinkStyle} rel='noopener noreferrer'>
                   Privacy Policy
                 </a>{' '}
-                •{' '}
+                -{' '}
                 <a href={`${baseUrl}/terms`} style={footerLinkStyle} rel='noopener noreferrer'>
                   Terms of Service
                 </a>{' '}
-                •{' '}
+                -{' '}
                 <a
                   href={
                     unsubscribe?.unsubscribeToken && unsubscribe?.email
@@ -208,7 +208,7 @@ export function EmailFooter({ baseUrl = getBaseUrl(), unsubscribe, messageId }: 
                 &nbsp;
               </td>
               <td style={baseStyles.footerText}>
-                © {new Date().getFullYear()} {brand.name}, All Rights Reserved
+                (c) {new Date().getFullYear()} {brand.name}, All Rights Reserved
               </td>
               <td style={baseStyles.gutter} width={spacing.gutter}>
                 &nbsp;

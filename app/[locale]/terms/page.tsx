@@ -1,90 +1,63 @@
 import type { Metadata } from 'next'
 import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
-import Navbar from '../(site)/navbar'
 import Footer from '../(site)/footer'
 import { GridLayout } from '../(site)/grid-layout'
+import Navbar from '../(site)/navbar'
 
 export const metadata: Metadata = generateSEOMetadata({
   title: 'Terms of Service',
-  description: 'Terms of Service for KyronHQ platform',
+  description: 'Terms of Service for FareFold.',
   canonical: '/terms',
 })
 
-export default async function TermsPage({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params
+const sections = [
+  [
+    '1. using FareFold',
+    'Use FareFold only for lawful travel planning and account activity. You are responsible for the bookings, preferences, payment details, and approvals you connect to the service.',
+  ],
+  [
+    '2. accounts',
+    'Keep your account secure and contact chetangonuguntla0@gmail.com if you suspect unauthorized access. We may pause activity when we need to protect your account or investigate misuse.',
+  ],
+  [
+    '3. rebooking rules',
+    'FareFold acts only inside the guardrails you configure. Lower fares, refund timing, seat availability, and airline policies can change quickly, so savings are never guaranteed.',
+  ],
+  [
+    '4. payment and refunds',
+    'Subscription fees cover FareFold software and support. Airline refunds, credits, fees, and fare changes remain controlled by the airline or travel provider.',
+  ],
+  [
+    '5. liability',
+    'FareFold is provided as is. We are not liable for airline schedule changes, fare availability, missed rebooking windows, provider outages, or indirect losses.',
+  ],
+  [
+    '6. updates to terms',
+    'We may update these terms as the product changes. Continued use means you accept the latest version.',
+  ],
+]
 
+export default function TermsPage() {
   return (
     <GridLayout>
       <Navbar />
-      <main className='min-h-screen pt-14'>
-        <div className='mx-auto max-w-4xl px-4 py-16 sm:px-6'>
-          <h1 className='mb-4 text-4xl font-semibold tracking-tight'>Terms of Service</h1>
-          <p className='mb-12 text-sm text-muted-foreground'>Last updated: 17 jan 2026</p>
+      <main className='py-20 md:py-24'>
+        <div className='farefold-shell max-w-4xl'>
+          <p className='text-[13px] font-extrabold uppercase tracking-[0.08em] text-[#8f2f24]'>
+            Legal
+          </p>
+          <h1 className='farefold-heading mt-4 text-[46px] font-bold leading-[0.96] md:text-[72px]'>
+            Terms of Service
+          </h1>
+          <p className='mt-4 text-sm font-bold text-[#6d6259]'>Last updated: Jan 17, 2026</p>
 
-          <div className='prose prose-sm max-w-none space-y-8 text-muted-foreground'>
-            <p>
-              welcome to kyronhq. by accessing or using our platform, you agree to these terms. if
-              you don't agree, please don't use kyronhq.
-            </p>
-
-            <section>
-              <h2 className='mb-4 text-xl font-semibold text-foreground'>1. using kyronhq</h2>
-              <p>
-                you must use kyronhq only for lawful purposes. you're responsible for how you use
-                the platform, including any projects, code, or data you upload or share.
-              </p>
-            </section>
-
-            <section>
-              <h2 className='mb-4 text-xl font-semibold text-foreground'>2. accounts</h2>
-              <p>
-                you're responsible for keeping your account secure. if you suspect unauthorized
-                access, contact us immediately at{' '}
-                <a
-                  href='mailto:support@kyronhq.dev'
-                  className='text-(--brand-accent-hex) underline-offset-4 hover:text-(--brand-accent-hover-hex) hover:underline'
-                >
-                  support@kyronhq.dev
-                </a>
-                .
-              </p>
-            </section>
-
-            <section>
-              <h2 className='mb-4 text-xl font-semibold text-foreground'>
-                3. intellectual property
-              </h2>
-              <p>
-                all code, templates, and assets provided through kyronhq are owned by us or
-                licensed to us. you retain rights to your own projects built using our tools, but
-                not to the underlying boilerplate.
-              </p>
-            </section>
-
-            <section>
-              <h2 className='mb-4 text-xl font-semibold text-foreground'>4. restrictions</h2>
-              <p>
-                don't attempt to hack, decompile, or resell kyronhq's products or services. we
-                reserve the right to suspend or terminate accounts that violate these terms.
-              </p>
-            </section>
-
-            <section>
-              <h2 className='mb-4 text-xl font-semibold text-foreground'>5. liability</h2>
-              <p>
-                kyronhq is provided "as is." we don't guarantee uninterrupted service or that our
-                platform will be error-free. we're not liable for any damages, data loss, or
-                downtime.
-              </p>
-            </section>
-
-            <section>
-              <h2 className='mb-4 text-xl font-semibold text-foreground'>6. updates to terms</h2>
-              <p>
-                we may update these terms anytime. continued use means you accept the latest
-                version.
-              </p>
-            </section>
+          <div className='mt-12 grid gap-4'>
+            {sections.map(([title, copy]) => (
+              <section key={title} className='farefold-card p-6'>
+                <h2 className='text-xl font-bold text-[#3b332d]'>{title}</h2>
+                <p className='mt-3 text-[#6d6259]'>{copy}</p>
+              </section>
+            ))}
           </div>
         </div>
       </main>

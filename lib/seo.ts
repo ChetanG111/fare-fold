@@ -2,37 +2,27 @@ import type { Metadata } from 'next'
 import { getBaseUrl } from '@/lib/utils'
 import { getBrandConfig } from '@/config/branding'
 
-/**
- * Site configuration for SEO
- */
 const brandConfig = getBrandConfig()
 
 export const siteConfig = {
   name: brandConfig.name,
   description:
-    'KyronHQ is a modern SaaS boilerplate to simplify and optimize your shipping process with modern web technologies.',
+    'FareFold books flexible flights, tracks fare drops, and rebooks automatically so travelers keep the savings.',
   url: getBaseUrl(),
-  twitterHandle: '@kyronhq',
-  creator: 'KyronHQ',
+  twitterHandle: '@farefold',
+  creator: 'FareFold',
   keywords: [
-    'KyronHQ',
-    'SaaS boilerplate',
-    'Next.js template',
-    'Shipping solution',
-    'E-commerce boilerplate',
-    'Stripe integration',
-    'LemonSqueezy integration',
-    'Supabase authentication',
-    'Drizzle ORM',
-    'Mailgun',
-    'TypeScript boilerplate',
-    'React SaaS',
+    'FareFold',
+    'flight price tracking',
+    'refundable flights',
+    'automatic flight rebooking',
+    'fare drop alerts',
+    'travel savings',
+    'airfare tracking',
+    'flight refund tracker',
   ],
 } as const
 
-/**
- * Type for SEO metadata options
- */
 export type SEOOptions = {
   title?: string
   description?: string
@@ -50,18 +40,17 @@ export type SEOOptions = {
   allowCanonicalQuery?: boolean
 }
 
-/**
- * Generate absolute URL from a path
- */
 const getAbsoluteUrl = (path: string): string => {
   const trimmed = path.trim()
   const isAbsolute = /^https?:\/\//i.test(trimmed) || trimmed.startsWith('//')
+
   if (isAbsolute) {
     return trimmed
   }
 
   const baseUrl = getBaseUrl().replace(/\/$/, '')
   const cleanPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`
+
   return `${baseUrl}${cleanPath}`
 }
 
@@ -71,17 +60,16 @@ const normalizeCanonicalPath = (canonicalPath?: string, allowQuery?: boolean) =>
   }
 
   const [withoutHash] = canonicalPath.split('#')
+
   if (allowQuery) {
     return withoutHash
   }
 
   const [withoutQuery] = withoutHash.split('?')
+
   return withoutQuery
 }
 
-/**
- * Generate Open Graph metadata
- */
 const getOpenGraph = (options: SEOOptions) => {
   const imageUrl = options.image || '/opengraph-image.png'
 
@@ -103,9 +91,6 @@ const getOpenGraph = (options: SEOOptions) => {
   }
 }
 
-/**
- * Generate Twitter Card metadata
- */
 const getTwitterCard = (options: SEOOptions) => {
   const imageUrl = options.image || '/twitter-image.png'
 
@@ -118,10 +103,6 @@ const getTwitterCard = (options: SEOOptions) => {
   }
 }
 
-/**
- * Generate comprehensive metadata for a page
- * This is the main function to use for generating SEO metadata
- */
 export const generateMetadata = (options: SEOOptions = {}): Metadata => {
   const description = options.description || siteConfig.description
   const keywords = options.keywords || siteConfig.keywords
@@ -133,13 +114,11 @@ export const generateMetadata = (options: SEOOptions = {}): Metadata => {
     ? getAbsoluteUrl(normalizedCanonicalPath)
     : siteConfig.url
 
-  // For root layout, use absolute and template
-  // For child pages, just use string title (template will be applied automatically)
   const titleMetadata = options.isRootLayout
     ? {
-      absolute: options.title || siteConfig.name,
-      template: `%s · ${siteConfig.name}`,
-    }
+        absolute: options.title || siteConfig.name,
+        template: `%s - ${siteConfig.name}`,
+      }
     : options.title || siteConfig.name
 
   return {
@@ -183,9 +162,6 @@ export const generateMetadata = (options: SEOOptions = {}): Metadata => {
   }
 }
 
-/**
- * Generate JSON-LD structured data for organization
- */
 export const getOrganizationSchema = () => {
   return {
     '@context': 'https://schema.org',
@@ -193,14 +169,11 @@ export const getOrganizationSchema = () => {
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
-    logo: getAbsoluteUrl('/logo.png'),
-    sameAs: ['https://github.com/kyronhq', 'https://x.com/kyronhq'],
+    logo: getAbsoluteUrl('/image.png'),
+    sameAs: [],
   }
 }
 
-/**
- * Generate JSON-LD structured data for website
- */
 export const getWebsiteSchema = () => {
   return {
     '@context': 'https://schema.org',
@@ -208,20 +181,9 @@ export const getWebsiteSchema = () => {
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${siteConfig.url}/search?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
   }
 }
 
-/**
- * Generate JSON-LD structured data for breadcrumbs
- */
 export const getBreadcrumbSchema = (items: Array<{ name: string; url: string }>) => {
   return {
     '@context': 'https://schema.org',
@@ -235,9 +197,6 @@ export const getBreadcrumbSchema = (items: Array<{ name: string; url: string }>)
   }
 }
 
-/**
- * Generate JSON-LD structured data for article/blog post
- */
 export const getArticleSchema = (options: {
   title: string
   description: string
@@ -273,9 +232,6 @@ export const getArticleSchema = (options: {
   }
 }
 
-/**
- * Generate JSON-LD structured data for blog/collection page
- */
 export const getBlogSchema = (options: {
   name: string
   description: string

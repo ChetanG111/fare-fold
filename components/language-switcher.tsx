@@ -1,13 +1,15 @@
 'use client'
 
-import { useLocale } from 'next-intl'
-import { usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
+import { usePathname, useRouter } from '@/i18n/navigation'
+import { useLocale } from 'next-intl'
 
-const localeNames: Record<string, string> = {
+type Locale = (typeof routing.locales)[number]
+
+const localeNames: Record<Locale, string> = {
   en: 'English',
-  fr: 'Français',
-  es: 'Español',
+  fr: 'Francais',
+  es: 'Espanol',
 }
 
 export function LanguageSwitcher() {
@@ -15,7 +17,7 @@ export function LanguageSwitcher() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const handleLocaleChange = (newLocale: string) => {
+  const handleLocaleChange = (newLocale: Locale) => {
     router.replace(pathname, { locale: newLocale })
   }
 
@@ -23,14 +25,14 @@ export function LanguageSwitcher() {
     <div className='flex items-center gap-2'>
       <span className='text-sm font-medium text-muted-foreground'>Language:</span>
       <select
-        value={locale}
-        onChange={(e) => handleLocaleChange(e.target.value)}
-        className='rounded-md border border-[#E4E4E7] bg-white px-3 py-1.5 text-sm font-medium text-foreground transition-colors duration-200 ease-in-out hover:border-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
         aria-label='Select language'
+        className='rounded-md border border-[#E4E4E7] bg-white px-3 py-1.5 font-medium text-foreground text-sm transition-colors duration-200 ease-in-out hover:border-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
+        onChange={(event) => handleLocaleChange(event.target.value as Locale)}
+        value={locale}
       >
         {routing.locales.map((loc) => (
           <option key={loc} value={loc}>
-            {localeNames[loc] || loc}
+            {localeNames[loc]}
           </option>
         ))}
       </select>

@@ -1,41 +1,26 @@
-'use client'
-
+import { Link } from '@/i18n/navigation'
 import { ArrowUpRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-
 
 export default function CTA() {
   return (
-    <section className='py-12 md:py-24 px-4 sm:px-6 bg-[#F4F4F5]'>
-      <div className='mx-auto max-w-4xl'>
-        {/* Section label */}
-        <h2
-          className='text-center text-sm font-medium text-muted-foreground mb-8'
-          style={{ fontFamily: 'var(--font-geist-mono)' }}
-        >
-          GET STARTED
-        </h2>
-
-        {/* Main heading */}
-        <div className='text-center mb-12'>
-          <h2 className='text-3xl font-semibold tracking-tight mb-4'>
-            Your next product could be live by tonight.
+    <section id='final' className='bg-[#211b17] py-20 text-[#fff8ee] md:py-[88px]'>
+      <div className='farefold-shell grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_auto]'>
+        <div>
+          <h2 className='farefold-heading max-w-[780px] text-[38px] font-bold leading-[0.96] md:text-[64px]'>
+            Let your next flight keep earning after checkout.
           </h2>
-          <p className='text-base text-muted-foreground'>
-            Focus on growth while the stack takes care of the heavy lifting
+          <p className='mt-5 max-w-[600px] text-lg text-[#fff8ee]/75'>
+            Start with one refundable itinerary and see every price move without refreshing another
+            booking site.
           </p>
         </div>
-
-        {/* Buttons */}
-        <div className='mx-auto mt-10 flex items-center justify-center gap-4'>
-          <Button className='font-semibold h-12! px-8 text-base text-white'>
-            Get Started
-            <ArrowUpRight className='h-8 w-8 ml-2' />
-          </Button>
-          <Button variant='outline' className='font-semibold h-12! px-8 text-base'>
-            Try demo
-          </Button>
-        </div>
+        <Link
+          href='mailto:chetangonuguntla0@gmail.com?subject=Start%20tracking%20my%20trip'
+          className='inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-[#fff8ee] px-5 font-extrabold text-[#211b17] transition hover:-translate-y-0.5 max-sm:w-full'
+        >
+          Start tracking
+          <ArrowUpRight className='h-5 w-5' />
+        </Link>
       </div>
     </section>
   )

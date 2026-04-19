@@ -1,153 +1,109 @@
-'use client'
+import { Link } from '@/i18n/navigation'
 
-import { useTranslations } from 'next-intl'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { CheckmarkCircle01Icon } from '@hugeicons/core-free-icons'
-import { Flame } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-
+const plans = [
+  {
+    name: 'Free Watch',
+    description: 'For one trip when you want proof that your fare is still fair.',
+    price: '$0',
+    suffix: '/ trip',
+    features: [
+      'Track one refundable itinerary',
+      'Daily fare-drop digest',
+      'Manual rebook instructions',
+      'Refund window reminders',
+    ],
+    cta: 'Try free',
+    featured: false,
+  },
+  {
+    name: 'Personal',
+    description: 'For frequent personal travel and automatic rebooking within your rules.',
+    price: '$9',
+    suffix: '/ month',
+    features: [
+      'Unlimited active trips',
+      'Automatic eligible rebooking',
+      'Seat and cabin guardrails',
+      'Refund and credit tracking',
+      'Priority drop alerts',
+    ],
+    cta: 'Start Personal',
+    featured: true,
+  },
+  {
+    name: 'Family',
+    description: 'For households coordinating several travelers, school breaks, and visits home.',
+    price: '$16',
+    suffix: '/ month',
+    features: [
+      'Six traveler profiles',
+      'Group-seat protection',
+      'Shared digest and approvals',
+      'Family refund timeline',
+      'Concierge policy review',
+    ],
+    cta: 'Choose Family',
+    featured: false,
+  },
+]
 
 export default function Pricing() {
-  const t = useTranslations()
-
-  const communityFeatures = [
-    { text: 'Full Next.js boilerplate', included: true },
-    { text: 'Auth, payments & UI prewired', included: true },
-    { text: 'Built-in SEO', included: true },
-    { text: 'Resend transaction emails', included: true },
-    { text: 'Payments via Stripe / Lemon Squeezy / Polar', included: true },
-    { text: 'Internationalization (i18n) with TypeScript', included: true },
-    { text: 'Up to 100+ hours saved', included: true },
-    { text: 'MIT open-source license', included: true },
-    { text: 'Community Releases & fixes', included: true },
-  ]
-
-  const premiumFeatures = [
-    { text: 'Everything in free', included: true },
-    { text: 'One-click deploys', included: true },
-    { text: 'Role-based access & invite system', included: true },
-    { text: 'Advanced SEO & Blog', included: true },
-    { text: 'Analytics hooks ready for Posthog', included: true },
-    { text: 'Pro UI kit', included: true },
-    { text: 'Private Discord Community', included: true },
-    { text: 'Lifetime updates', included: true },
-    { text: 'Priority support', included: true },
-  ]
-
   return (
-    <section id='pricing' className='py-12 md:py-24 bg-[#F4F4F5]'>
-      <div className='mx-auto max-w-6xl px-4 sm:px-6'>
-        <div className='mx-auto max-w-3xl'>
-                    <h2
-                      className='text-center text-sm font-medium text-muted-foreground mb-8'   
-                      style={{ fontFamily: 'var(--font-geist-mono)' }}
-                    >
-                      {t('PRICING')}
-                    </h2>          <div className='text-center mb-16'>
-            <h2 className='text-4xl font-semibold tracking-tight mb-4'>
-              Built for builders who play to win
-            </h2>
-            <p className='text-lg text-muted-foreground'>
-              Launch faster, sell sooner, and grow without fighting setup pain
-            </p>
-          </div>
+    <section id='pricing' className='py-20 md:py-24'>
+      <div className='farefold-shell'>
+        <div className='mb-10 grid gap-6 md:grid-cols-[1fr_auto] md:items-end'>
+          <h2 className='farefold-heading max-w-[780px] text-[38px] font-bold leading-[0.96] text-[#211b17] md:text-[64px]'>
+            Start free, pay when the habit gets useful.
+          </h2>
+          <p className='max-w-[440px] text-[17px] text-[#6d6259]'>
+            A consumer-friendly model that makes sense before your first saved dollar and scales for
+            families.
+          </p>
+        </div>
 
-          <div className='grid md:grid-cols-2 gap-8'>
-            {/* Community */}
-            <div className='flex flex-col p-6 border border-[#E4E4E7] rounded-2xl bg-card'>
-              <div className='mb-6'>
-                <h3 className='text-2xl font-semibold mb-4'>Community</h3>
-                <div className='mb-4'>
-                  <span className='text-4xl font-semibold font-mono'>$0</span>
-                </div>
-                <p className='text-sm text-muted-foreground mb-4'>
-                  For learners, early builders & indie devs who love to experiment.
-                </p>
-                <p
-                  className='text-xs font-medium text-foreground uppercase'
-                  style={{ fontFamily: 'var(--font-geist-mono)' }}
-                >
-                  INCLUDING
-                </p>
+        <div className='grid gap-4 lg:grid-cols-3'>
+          {plans.map((plan) => (
+            <article
+              key={plan.name}
+              className={`farefold-card relative flex min-h-[456px] flex-col p-7 ${
+                plan.featured ? 'farefold-shadow border-[#8f2f24]/50' : ''
+              }`}
+            >
+              {plan.featured && (
+                <span className='absolute right-5 top-5 rounded-full bg-[#8f2f24] px-3 py-2 text-[11px] font-extrabold uppercase tracking-[0.06em] text-[#fff8ee]'>
+                  Recommended
+                </span>
+              )}
+              <h3 className='pr-24 text-[19px] font-bold leading-tight text-[#3b332d]'>
+                {plan.name}
+              </h3>
+              <p className='mt-3 text-[#6d6259]'>{plan.description}</p>
+              <div className='farefold-heading mt-6 text-5xl leading-none'>
+                {plan.price}{' '}
+                <span className='font-sans text-sm font-extrabold text-[#6d6259]'>
+                  {plan.suffix}
+                </span>
               </div>
-              <ul className='space-y-3 mb-8 flex-1'>
-                {communityFeatures.map((feature, index) => (
-                  <li key={index} className='flex items-center gap-2 text-sm'>
-                    <HugeiconsIcon
-                      icon={CheckmarkCircle01Icon}
-                      className='h-4 w-4 text-muted-foreground shrink-0'
-                    />
-                    <span className='text-muted-foreground'>{feature.text}</span>
+              <ul className='my-7 grid gap-2.5 text-[#6d6259]'>
+                {plan.features.map((feature) => (
+                  <li key={feature} className='flex gap-2 font-semibold'>
+                    <span className='pt-1 text-[11px] font-black text-[#246b50]'>OK</span>
+                    <span>{feature}</span>
                   </li>
                 ))}
               </ul>
-              <div className='flex flex-col gap-2'>
-                <Button variant='outline' className='w-full h-12! text-sm font-medium' size='lg'>
-                  <svg
-                    viewBox='0 0 16 16'
-                    className='h-4 w-4'
-                    fill='currentColor'
-                    aria-hidden='true'
-                  >
-                    <path d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z' />
-                  </svg>
-                  Clone repo
-                </Button>
-                <p className='text-sm text-center text-muted-foreground'>
-                  Open source. Free forever
-                </p>
-              </div>
-            </div>
-
-            {/* Premium */}
-            <div className='flex flex-col p-6 relative border border-primary rounded-2xl bg-card shadow-lg shadow-primary/5'>
-              <div className='mb-6'>
-                <div className='flex items-start justify-between mb-4'>
-                  <h3 className='text-2xl font-semibold'>Premium</h3>
-                  <Badge className='bg-white border border-[#DBDAD6] text-[#878787] rounded-full px-3 py-3 font-medium flex items-center gap-1.5'>
-                    <Flame className='h-3.5 w-3.5' />
-                    Most popular
-                  </Badge>
-                </div>
-                <div className='mb-4'>
-                  <div className='flex items-baseline gap-2'>
-                    <span className='text-sm text-muted-foreground line-through font-mono'>
-                      $150
-                    </span>
-                    <span className='text-4xl font-semibold font-mono'>$90</span>
-                  </div>
-                </div>
-                <p className='text-sm text-muted-foreground mb-4'>
-                  For founders & builders ready to ship real products and make money.
-                </p>
-                <p
-                  className='text-xs font-medium text-foreground uppercase'
-                  style={{ fontFamily: 'var(--font-geist-mono)' }}
-                >
-                  INCLUDING
-                </p>
-              </div>
-              <ul className='space-y-3 mb-8 flex-1'>
-                {premiumFeatures.map((feature, index) => (
-                  <li key={index} className='flex items-center gap-2 text-sm'>
-                    <HugeiconsIcon
-                      icon={CheckmarkCircle01Icon}
-                      className='h-4 w-4 text-muted-foreground shrink-0'
-                    />
-                    <span className='text-muted-foreground'>{feature.text}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className='flex flex-col gap-2'>
-                <Button className='w-full'>Get Started</Button>
-                <p className='text-sm text-center text-muted-foreground'>
-                  Start your project today.
-                </p>
-              </div>
-            </div>
-          </div>
+              <Link
+                href='/#final'
+                className={`mt-auto inline-flex min-h-12 w-full items-center justify-center rounded-[8px] px-5 font-extrabold transition hover:-translate-y-0.5 ${
+                  plan.featured
+                    ? 'bg-[#8f2f24] text-[#fff8ee] shadow-[0_12px_28px_rgba(143,47,36,0.2)]'
+                    : 'border border-[#ded3c5] bg-[#fffdf8]/75 text-[#211b17] hover:bg-[#fffdf8]'
+                }`}
+              >
+                {plan.cta}
+              </Link>
+            </article>
+          ))}
         </div>
       </div>
     </section>

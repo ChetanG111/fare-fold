@@ -1,0 +1,292 @@
+{
+    "nodes": [
+        {
+            "id": "changelog_v1_0_0",
+            "label": "v1.0.0 Initial Release",
+            "file_type": "document",
+            "source_file": "CHANGELOG.md"
+        },
+        {
+            "id": "gemini_graphify_integration",
+            "label": "Graphify Integration",
+            "file_type": "document",
+            "source_file": "GEMINI.md"
+        },
+        {
+            "id": "gemini_graph_report",
+            "label": "graphify-out/GRAPH_REPORT.md",
+            "file_type": "document",
+            "source_file": "GEMINI.md"
+        },
+        {
+            "id": "index_html_title",
+            "label": "Fare-Fold",
+            "file_type": "document",
+            "source_file": "index.html"
+        },
+        {
+            "id": "ins_institutional_setup",
+            "label": "Institutional Setup",
+            "file_type": "document",
+            "source_file": "ins.md"
+        },
+        {
+            "id": "readme_fare_fold",
+            "label": "Fare Fold",
+            "file_type": "document",
+            "source_file": "README.md"
+        },
+        {
+            "id": "readme_tech_stack",
+            "label": "Tech Stack",
+            "file_type": "document",
+            "source_file": "README.md"
+        },
+        {
+            "id": "readme_next_js",
+            "label": "Next.js",
+            "file_type": "document",
+            "source_file": "README.md"
+        },
+        {
+            "id": "readme_react",
+            "label": "React",
+            "file_type": "document",
+            "source_file": "README.md"
+        },
+        {
+            "id": "readme_drizzle_orm",
+            "label": "Drizzle ORM",
+            "file_type": "document",
+            "source_file": "README.md"
+        },
+        {
+            "id": "setup_guide_prerequisites",
+            "label": "Prerequisites",
+            "file_type": "document",
+            "source_file": "SETUP_GUIDE.md"
+        },
+        {
+            "id": "setup_guide_pnpm",
+            "label": "pnpm",
+            "file_type": "document",
+            "source_file": "SETUP_GUIDE.md"
+        },
+        {
+            "id": "suggestions_dark_mode",
+            "label": "Dark Mode Support",
+            "file_type": "document",
+            "source_file": "suggestions.md"
+        },
+        {
+            "id": "welcome_blog_post",
+            "label": "Welcome Blog Post",
+            "file_type": "document",
+            "source_file": "content/blog/welcome.mdx"
+        },
+        {
+            "id": "introduction_docs",
+            "label": "Introduction Docs",
+            "file_type": "document",
+            "source_file": "content/docs/introduction.mdx"
+        },
+        {
+            "id": "landing_port_plan",
+            "label": "Landing Page Port Plan",
+            "file_type": "document",
+            "source_file": "docs/plans/2026-04-19-farefold-landing-port.md"
+        },
+        {
+            "id": "landing_port_rationale",
+            "label": "Rationale for Porting Landing Page",
+            "file_type": "document",
+            "source_file": "docs/plans/2026-04-19-farefold-landing-port.md"
+        },
+        {
+            "id": "opengraph_image_main",
+            "label": "OpenGraph Image (Main)",
+            "file_type": "image",
+            "source_file": "app/[locale]/opengraph-image.png"
+        },
+        {
+            "id": "twitter_image_main",
+            "label": "Twitter Image (Main)",
+            "file_type": "image",
+            "source_file": "app/[locale]/twitter-image.png"
+        },
+        {
+            "id": "ui_grain_texture",
+            "label": "UI Grain Texture",
+            "file_type": "image",
+            "source_file": "public/grain.jpg"
+        },
+        {
+            "id": "public_logo_image",
+            "label": "Fare-Fold Logo",
+            "file_type": "image",
+            "source_file": "public/image.png"
+        },
+        {
+            "id": "tech_nextjs_logo",
+            "label": "Next.js Logo",
+            "file_type": "image",
+            "source_file": "public/nextjs_logo.svg"
+        },
+        {
+            "id": "opengraph_image_public",
+            "label": "OpenGraph Image (Public)",
+            "file_type": "image",
+            "source_file": "public/opengraph-image.png"
+        },
+        {
+            "id": "testimonial_image_1",
+            "label": "Testimonial Image 1",
+            "file_type": "image",
+            "source_file": "public/testimonial-image1.jpg"
+        }
+    ],
+    "edges": [
+        {
+            "source": "gemini_graphify_integration",
+            "target": "gemini_graph_report",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "GEMINI.md"
+        },
+        {
+            "source": "readme_fare_fold",
+            "target": "readme_tech_stack",
+            "relation": "conceptually_related_to",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "README.md"
+        },
+        {
+            "source": "readme_tech_stack",
+            "target": "readme_next_js",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "README.md"
+        },
+        {
+            "source": "readme_tech_stack",
+            "target": "readme_react",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "README.md"
+        },
+        {
+            "source": "readme_tech_stack",
+            "target": "readme_drizzle_orm",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "README.md"
+        },
+        {
+            "source": "setup_guide_prerequisites",
+            "target": "setup_guide_pnpm",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "SETUP_GUIDE.md"
+        },
+        {
+            "source": "landing_port_rationale",
+            "target": "landing_port_plan",
+            "relation": "rationale_for",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "docs/plans/2026-04-19-farefold-landing-port.md"
+        },
+        {
+            "source": "landing_port_plan",
+            "target": "readme_next_js",
+            "relation": "conceptually_related_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.9,
+            "source_file": "docs/plans/2026-04-19-farefold-landing-port.md"
+        },
+        {
+            "source": "opengraph_image_main",
+            "target": "readme_fare_fold",
+            "relation": "references",
+            "confidence": "INFERRED",
+            "confidence_score": 0.8,
+            "source_file": "app/[locale]/opengraph-image.png"
+        },
+        {
+            "source": "twitter_image_main",
+            "target": "readme_fare_fold",
+            "relation": "references",
+            "confidence": "INFERRED",
+            "confidence_score": 0.8,
+            "source_file": "app/[locale]/twitter-image.png"
+        },
+        {
+            "source": "opengraph_image_main",
+            "target": "twitter_image_main",
+            "relation": "semantically_similar_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.95,
+            "source_file": "app/[locale]/opengraph-image.png"
+        },
+        {
+            "source": "opengraph_image_main",
+            "target": "opengraph_image_public",
+            "relation": "semantically_similar_to",
+            "confidence": "INFERRED",
+            "confidence_score": 0.95,
+            "source_file": "app/[locale]/opengraph-image.png"
+        },
+        {
+            "source": "tech_nextjs_logo",
+            "target": "readme_next_js",
+            "relation": "references",
+            "confidence": "EXTRACTED",
+            "confidence_score": 1.0,
+            "source_file": "public/nextjs_logo.svg"
+        },
+        {
+            "source": "public_logo_image",
+            "target": "readme_fare_fold",
+            "relation": "references",
+            "confidence": "INFERRED",
+            "confidence_score": 0.9,
+            "source_file": "public/image.png"
+        }
+    ],
+    "hyperedges": [
+        {
+            "id": "project_branding",
+            "label": "Project Branding Assets",
+            "nodes": [
+                "opengraph_image_main",
+                "twitter_image_main",
+                "opengraph_image_public",
+                "public_logo_image"
+            ],
+            "relation": "participate_in",
+            "confidence": "INFERRED",
+            "confidence_score": 0.85
+        },
+        {
+            "id": "project_documentation",
+            "label": "Project Documentation",
+            "nodes": [
+                "readme_fare_fold",
+                "setup_guide_prerequisites",
+                "introduction_docs",
+                "changelog_v1_0_0"
+            ],
+            "relation": "form",
+            "confidence": "INFERRED",
+            "confidence_score": 0.9
+        }
+    ],
+    "input_tokens": 0,
+    "output_tokens": 0
+}

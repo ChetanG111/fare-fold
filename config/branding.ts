@@ -36,34 +36,38 @@ export interface BrandConfig {
   privacyUrl?: string
   theme?: {
     colors?: ThemeColors
-    radius?: string // e.g., '0.5rem'
+    radius?: string
   }
 }
 
-/**
- * Default brand configuration values
- * Customize these values to change the look and feel of your app.
- */
 const defaultConfig: BrandConfig = {
-  name: 'KyronHQ',
+  name: 'FareFold',
   logoUrl: undefined,
-  faviconUrl: '/favicon/favicon.ico',
+  faviconUrl: '/image.png',
   customCssUrl: undefined,
-  supportEmail: 'hi@kyronhq.dev',
+  supportEmail: 'chetangonuguntla0@gmail.com',
   documentationUrl: undefined,
   termsUrl: undefined,
   privacyUrl: undefined,
   theme: {
-    // These colors will override the defaults in globals.css
-    // Leave undefined to use the default OKLCH values from globals.css
-    // Format: Hex, RGB, or HSL (e.g., '#701ffc', 'rgb(112, 31, 252)')
     colors: {
-      primary: '#000000', // Black
-      primaryForeground: '#ffffff', // White text on black button
-      // background: '#ffffff', // Uncomment to override
-      // foreground: '#0c0c0c', // Uncomment to override
+      background: '#fbf7f0',
+      foreground: '#211b17',
+      card: '#fffdf8',
+      cardForeground: '#211b17',
+      primary: '#8f2f24',
+      primaryForeground: '#fff8ee',
+      secondary: '#f1eadf',
+      secondaryForeground: '#211b17',
+      muted: '#f1eadf',
+      mutedForeground: '#6d6259',
+      accent: '#8f2f24',
+      accentForeground: '#fff8ee',
+      border: '#ded3c5',
+      input: '#ded3c5',
+      ring: '#8f2f24',
     },
-    radius: '0.625rem',
+    radius: '0.5rem',
   },
 }
 
@@ -71,9 +75,6 @@ export const getBrandConfig = (): BrandConfig => {
   return defaultConfig
 }
 
-/**
- * Hook to use brand configuration in React components
- */
 export const useBrandConfig = () => {
   return getBrandConfig()
 }

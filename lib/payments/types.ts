@@ -114,9 +114,17 @@ export type WebhookEventType =
   | 'subscription.updated'
   | 'subscription.deleted'
   | 'subscription.canceled'
+  | 'subscription.active'
+  | 'subscription.renewed'
+  | 'subscription.cancelled'
+  | 'subscription.expired'
+  | 'subscription.failed'
+  | 'subscription.on_hold'
+  | 'subscription.plan_changed'
   | 'invoice.payment_succeeded'
   | 'invoice.payment_failed'
   | 'checkout.session.completed'
+  | 'payment.succeeded'
   | 'order.paid'
 
 /**
@@ -183,7 +191,11 @@ export interface PaymentAdapter {
   /**
    * Validate webhook signature (if applicable)
    */
-  validateWebhook(rawBody: string, signature: string, headers?: Record<string, string>): Promise<boolean>
+  validateWebhook(
+    rawBody: string,
+    signature: string,
+    headers?: Record<string, string>
+  ): Promise<boolean>
 }
 
 /**

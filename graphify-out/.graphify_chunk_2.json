@@ -1,0 +1,345 @@
+{
+  "nodes": [
+    {
+      "id": "twitter_image_twitter_logo",
+      "label": "Twitter Logo",
+      "file_type": "image",
+      "source_file": "public	witter-image.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vercel_vercel_logo",
+      "label": "Vercel Logo",
+      "file_type": "image",
+      "source_file": "public\vercel.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "base_ui_base_ui_logo",
+      "label": "Base UI Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\base-ui.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "better_auth_better_auth_logo",
+      "label": "Better Auth Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\better-auth.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "bun_bun_logo",
+      "label": "Bun Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\bun.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "claude_claude_logo",
+      "label": "Claude Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\claude.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "copilot_copilot_logo",
+      "label": "GitHub Copilot Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\copilot.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "cursor_cursor_logo",
+      "label": "Cursor Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\cursor.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "drizzle_orm_drizzle_orm_logo",
+      "label": "Drizzle ORM Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\drizzle-orm.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "polar_polar_logo",
+      "label": "Polar Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\polar.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "posthog_posthog_logo",
+      "label": "PostHog Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\posthog.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "prisma_prisma_logo",
+      "label": "Prisma Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\prisma.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "resend_resend_logo",
+      "label": "Resend Logo",
+      "file_type": "image",
+      "source_file": "public\stack-iconsesend.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "stripe_stripe_logo",
+      "label": "Stripe Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\stripe.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "tailwindcss_tailwind_css_logo",
+      "label": "Tailwind CSS Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons	ailwindcss.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "tanstack_tanstack_logo",
+      "label": "TanStack Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons	anstack.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "typescript_typescript_logo",
+      "label": "TypeScript Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons	ypescript.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "upstash_upstash_logo",
+      "label": "Upstash Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\upstash.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "vercel_stack_vercel_logo",
+      "label": "Vercel Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\vercel.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "windsurf_windsurf_logo",
+      "label": "Windsurf Logo",
+      "file_type": "image",
+      "source_file": "public\stack-icons\windsurf.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "discord_icon_discord_logo",
+      "label": "Discord Logo",
+      "file_type": "image",
+      "source_file": "public\static\discord-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "github_icon_github_logo",
+      "label": "GitHub Logo",
+      "file_type": "image",
+      "source_file": "public\static\github-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "x_icon_x_logo",
+      "label": "X Corp Logo",
+      "file_type": "image",
+      "source_file": "public\static\x-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "x_icon_x_logo",
+      "target": "twitter_image_twitter_logo",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "public\static\x-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "vercel_vercel_logo",
+      "target": "vercel_stack_vercel_logo",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.99,
+      "source_file": "public\vercel.svg",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "github_icon_github_logo",
+      "target": "copilot_copilot_logo",
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public\static\github-icon.png",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "prisma_prisma_logo",
+      "target": "drizzle_orm_drizzle_orm_logo",
+      "relation": "semantically_similar_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "public\stack-icons\prisma.svg",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "project_technology_stack",
+      "label": "Project Technology Stack",
+      "nodes": [
+        "base_ui_base_ui_logo",
+        "better_auth_better_auth_logo",
+        "bun_bun_logo",
+        "claude_claude_logo",
+        "copilot_copilot_logo",
+        "cursor_cursor_logo",
+        "drizzle_orm_drizzle_orm_logo",
+        "polar_polar_logo",
+        "posthog_posthog_logo",
+        "prisma_prisma_logo",
+        "resend_resend_logo",
+        "stripe_stripe_logo",
+        "tailwindcss_tailwind_css_logo",
+        "tanstack_tanstack_logo",
+        "typescript_typescript_logo",
+        "upstash_upstash_logo",
+        "vercel_stack_vercel_logo",
+        "windsurf_windsurf_logo"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public\stack-icons"
+    },
+    {
+      "id": "project_social_links",
+      "label": "Project Social Media Links",
+      "nodes": [
+        "discord_icon_discord_logo",
+        "github_icon_github_logo",
+        "x_icon_x_logo",
+        "twitter_image_twitter_logo"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.9,
+      "source_file": "public\static"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

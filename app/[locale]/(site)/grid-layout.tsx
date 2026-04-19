@@ -1,18 +1,10 @@
-'use client'
-
 interface GridLayoutProps {
   children: React.ReactNode
   className?: string
 }
 
 export const GridLayout = ({ children, className = '' }: GridLayoutProps) => {
-  return (
-    <>
-
-      {/* Content Wrapper */}
-      <div className={`relative ${className}`}>{children}</div>
-    </>
-  )
+  return <div className={`relative min-h-screen ${className}`}>{children}</div>
 }
 
 interface SectionDividerProps {
@@ -21,8 +13,8 @@ interface SectionDividerProps {
 
 export const SectionDivider = ({ className = '' }: SectionDividerProps) => {
   return (
-    <div className={`${className}`}>
-      <div className='h-px w-full bg-[#E4E4E7]' />
+    <div className={className}>
+      <div className='h-px w-full bg-[#ded3c5]' />
     </div>
   )
 }

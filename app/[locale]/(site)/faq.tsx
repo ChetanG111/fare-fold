@@ -1,104 +1,46 @@
-'use client'
-
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionPanel,
-} from '@/components/ui/accordion'
-import Link from 'next/link'
+const faqs = [
+  [
+    'Does FareFold book the first ticket?',
+    'Yes, when you choose a refundable fare through FareFold. You can also forward an eligible booking email to start tracking.',
+  ],
+  [
+    'Will it change my seat or cabin?',
+    'Only inside the guardrails you set. If a lower fare risks your cabin, seat, or group, FareFold asks first.',
+  ],
+  [
+    'What if the airline gives credit instead of cash?',
+    'The refund tracker shows the expected return method before rebooking so you can decide if the savings are worth it.',
+  ],
+  [
+    'How does FareFold make money?',
+    'Premium subscriptions. FareFold does not hide fees inside the fare or push flights that are worse for you.',
+  ],
+  [
+    'Can it guarantee savings?',
+    'No. It guarantees disciplined watching and eligible action. When fares do drop, it helps you move before the window closes.',
+  ],
+]
 
 export default function FAQ() {
-  const faqs = [
-    {
-      question: "What's included in the free version?",
-      answer:
-        "Everything you need to build: a full Next.js boilerplate with auth, payments, UI, SEO, and transactional emails. It's free forever under the MIT license.",
-    },
-    {
-      question: "What's in the pro version?",
-      answer:
-        'Pro adds one-click deploys, a CLI tool, advanced auth (roles & invites), automated emails, analytics hooks, lifetime updates, and priority support — built for founders who want to launch fast.',
-    },
-    {
-      question: "Do I lose access to the free version if I don't upgrade?",
-      answer:
-        'Nope. The free version stays open source and always available. Pro just saves you time and setup pain.',
-    },
-    {
-      question: 'Is it really a one-time payment?',
-      answer: 'Yep. $90 lifetime access. No subscriptions, no renewal fees, ever.',
-    },
-    {
-      question: 'Can I use it for commercial products?',
-      answer: 'Yes — both free and pro can be used to build and sell your own projects.',
-    },
-    {
-      question: 'What if I find a bug or issue?',
-      answer:
-        'Open an issue on GitHub or drop it in the Discord — we fix bugs fast, and pro users get priority patches + updates.',
-    },
-    {
-      question: 'Can I upgrade later?',
-      answer:
-        "Absolutely. You can start free, and when you're ready to go pro, your setup stays compatible.",
-    },
-    {
-      question: 'How often do you ship updates?',
-      answer:
-        'Bug fixes and small updates drop regularly; pro users get early access to new templates and features.',
-    },
-    {
-      question: 'What support does pro include?',
-      answer:
-        "Private Discord, priority replies, and lifetime updates. You'll never be stuck figuring things out alone.",
-    },
-  ]
-
   return (
-    <section id='faq' className='py-12 md:py-24 border-t border-b border-[#E4E4E7] bg-[#F4F4F5]'>
-      <div className='mx-auto max-w-6xl px-4 sm:px-6'>
-        <h2
-          className='text-center text-sm font-medium text-muted-foreground mb-8'
-          style={{ fontFamily: 'var(--font-geist-mono)' }}
-        >
-          FAQ
-        </h2>
-        <div className='flex flex-col items-center gap-8 max-w-2xl mx-auto'>
-          {/* Header Section */}
-          <div className='text-center'>
-            <h2 className='text-3xl font-semibold tracking-tight mb-4'>
-              Frequently Asked Questions
-            </h2>
-            <p className='text-base text-muted-foreground'>
-              Have another question? Contact us on{' '}
-              <Link
-                href='https://x.com/kyronhq'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-foreground underline underline-offset-4 hover:text-primary transition-colors'
-              >
-                Twitter
-              </Link>
-              .
-            </p>
-          </div>
+    <section id='faq' className='py-20 md:py-24'>
+      <div className='farefold-shell'>
+        <div className='mb-10 grid gap-6 md:grid-cols-[1fr_auto] md:items-end'>
+          <h2 className='farefold-heading max-w-[780px] text-[38px] font-bold leading-[0.96] text-[#211b17] md:text-[64px]'>
+            Questions worth asking before you let an app rebook.
+          </h2>
+          <p className='max-w-[440px] text-[17px] text-[#6d6259]'>
+            Short answers to the practical concerns that matter most.
+          </p>
+        </div>
 
-          {/* FAQ Items */}
-          <div className='w-full'>
-            <Accordion className='space-y-0'>
-              {faqs.map((faq, index) => (
-                <AccordionItem key={index} className='border-b border-[#E4E4E7] last:border-b-0'>
-                  <AccordionTrigger className='text-left py-4 text-base font-medium hover:no-underline'>
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionPanel className='text-muted-foreground text-sm pb-4'>
-                    {faq.answer}
-                  </AccordionPanel>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+        <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-5'>
+          {faqs.map(([question, answer]) => (
+            <article key={question} className='farefold-card min-h-[232px] p-6'>
+              <h3 className='text-[19px] font-bold leading-tight text-[#3b332d]'>{question}</h3>
+              <p className='mt-3 text-[#6d6259]'>{answer}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>

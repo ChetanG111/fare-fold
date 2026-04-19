@@ -8,36 +8,31 @@ export default function manifest(): MetadataRoute.Manifest {
     name: brand.name,
     short_name: brand.name,
     description:
-      'KyronHQ is a modern SaaS boilerplate to simplify and optimize your shipping process.',
+      'FareFold books flexible flights, tracks fare drops, and rebooks automatically so travelers keep the savings.',
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    background_color: '#ffffff',
-    theme_color: brand.theme?.primaryColor,
+    background_color: '#fbf7f0',
+    theme_color: '#8f2f24',
     orientation: 'portrait-primary',
     icons: [
       {
-        src: '/favicon/android-chrome-192x192.png',
+        src: '/image.png',
         sizes: '192x192',
         type: 'image/png',
       },
       {
-        src: '/favicon/android-chrome-512x512.png',
+        src: '/image.png',
         sizes: '512x512',
         type: 'image/png',
       },
-      {
-        src: '/favicon/apple-touch-icon.png',
-        sizes: '180x180',
-        type: 'image/png',
-      },
     ],
-    categories: ['developer tools', 'productivity', 'saas'],
+    categories: ['travel', 'finance', 'productivity'],
     shortcuts: [
       {
         name: 'Open dashboard',
         short_name: 'Dashboard',
-        description: 'Go to your KyronHQ dashboard',
+        description: 'Go to your FareFold dashboard',
         url: '/dashboard',
       },
     ],

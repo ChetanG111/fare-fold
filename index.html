@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FareFold - Flight Prices, Renegotiated</title>
+    <meta name="description" content="FareFold books flexible flights, tracks fare drops, and rebooks automatically so travelers keep the savings." />
+    <meta property="og:title" content="FareFold - Flight Prices, Renegotiated" />
+    <meta property="og:description" content="A personal flight-pricing habit app that rebooks refundable fares when prices fall." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image:alt" content="FareFold mobile app showing a fare drop, automatic rebooking, and savings details." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #fbf7f0;
+        --surface: #fffdf8;
+        --surface-strong: #f1eadf;
+        --text: #211b17;
+        --muted: #6d6259;
+        --border: #ded3c5;
+        --accent: #8f2f24;
+        --accent-foreground: #fff8ee;
+        --success: #246b50;
+        --shadow: 0 24px 70px rgba(64, 44, 30, 0.12);
+        --radius: 8px;
+        --max: 1184px;
+        --headline: "Fraunces", Georgia, serif;
+        --body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background:
+          linear-gradient(90deg, rgba(33, 27, 23, 0.035) 1px, transparent 1px) 0 0 / 64px 64px,
+          linear-gradient(180deg, #fffaf2 0%, var(--bg) 34%, #f7f0e6 100%);
+        color: var(--text);
+        font-family: var(--body);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      a:focus-visible { outline: 3px solid rgba(143, 47, 36, 0.4); outline-offset: 3px; }
+      svg { display: block; }
+      h1, h2, h3, p { margin: 0; }
+      h1, h2 { font-family: var(--headline); letter-spacing: 0; line-height: 0.96; }
+      h1 { max-width: 730px; margin-top: 18px; font-size: clamp(52px, 7vw, 98px); font-weight: 700; }
+      h2 { max-width: 780px; font-size: clamp(38px, 4.8vw, 64px); font-weight: 700; }
+      h3 { color: #3b332d; font-size: 19px; line-height: 1.25; }
+      section { padding: 96px 0; }
+
+      .shell { width: min(calc(100% - 40px), var(--max)); margin: 0 auto; }
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid rgba(222, 211, 197, 0.74);
+        background: rgba(251, 247, 240, 0.88);
+        backdrop-filter: blur(16px);
+      }
+      .nav-inner { display: flex; min-height: 72px; align-items: center; justify-content: space-between; gap: 24px; }
+      .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; }
+      .brand-mark {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border: 1px solid #2e2621;
+        border-radius: var(--radius);
+        background: var(--text);
+        color: var(--accent-foreground);
+        font-family: var(--headline);
+        font-size: 20px;
+      }
+      .nav-links { display: flex; align-items: center; gap: 24px; color: var(--muted); font-size: 14px; font-weight: 700; }
+      .nav-links a:hover { color: var(--text); }
+
+      .btn {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid transparent;
+        border-radius: var(--radius);
+        padding: 0 20px;
+        font-weight: 800;
+        line-height: 1;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      }
+      .btn:hover { transform: translateY(-2px); }
+      .btn-primary { background: var(--accent); color: var(--accent-foreground); box-shadow: 0 12px 28px rgba(143, 47, 36, 0.2); }
+      .btn-secondary { border-color: var(--border); background: rgba(255, 253, 248, 0.76); color: var(--text); }
+
+      .hero { position: relative; overflow: hidden; padding: 72px 0 84px; border-bottom: 1px solid var(--border); }
+      .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 460px); align-items: center; gap: 72px; }
+      .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-size: 13px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .eyebrow:before { width: 28px; height: 1px; background: currentColor; content: ""; }
+      .hero-copy { max-width: 650px; margin-top: 24px; color: var(--muted); font-size: 20px; line-height: 1.62; }
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .hero-proof { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 640px; margin-top: 40px; }
+      .proof-tile { min-height: 96px; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; background: rgba(255, 253, 248, 0.72); }
+      .proof-tile strong { display: block; font-size: 21px; line-height: 1.1; }
+      .proof-tile span { display: block; margin-top: 8px; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.35; }
+
+      .product-wrap { position: relative; min-height: 624px; }
+      .ticket-stack {
+        position: absolute;
+        inset: 58px 8px auto auto;
+        width: 284px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: #fffaf2;
+        box-shadow: var(--shadow);
+        transform: rotate(5deg);
+      }
+      .ticket-stack:before, .ticket-stack:after { position: absolute; right: 18px; left: 18px; height: 1px; background: repeating-linear-gradient(90deg, var(--border) 0 8px, transparent 8px 14px); content: ""; }
+      .ticket-stack:before { top: 86px; }
+      .ticket-stack:after { bottom: 72px; }
+      .ticket-head { display: flex; justify-content: space-between; padding: 20px; font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .ticket-route { padding: 24px 20px 92px; }
+      .ticket-route b { display: block; font-family: var(--headline); font-size: 54px; line-height: 0.9; }
+      .ticket-route span { color: var(--muted); font-size: 13px; font-weight: 700; }
+      .phone {
+        position: absolute;
+        right: 88px;
+        --phone-x: 0;
+        width: 336px;
+        min-height: 604px;
+        border: 1px solid #2b211d;
+        border-radius: 34px;
+        padding: 12px;
+        background: #211b17;
+        box-shadow: 0 34px 80px rgba(41, 25, 15, 0.24);
+        animation: settle 700ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+      .screen { min-height: 580px; overflow: hidden; border-radius: 24px; background: var(--surface); }
+      .screen-top { display: flex; align-items: center; justify-content: space-between; padding: 22px 20px 16px; }
+      .screen-title { font-size: 13px; font-weight: 800; }
+      .pill { display: inline-flex; align-items: center; min-height: 28px; border: 1px solid rgba(36, 107, 80, 0.28); border-radius: 999px; padding: 0 10px; background: rgba(36, 107, 80, 0.08); color: var(--success); font-size: 12px; font-weight: 800; }
+      .fare-alert { margin: 0 16px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff7ec; }
+      .fare-alert-main { padding: 18px; border-bottom: 1px solid var(--border); }
+      .fare-alert-main span { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .fare-alert-main strong { display: block; margin-top: 8px; font-family: var(--headline); font-size: 42px; line-height: 1; }
+      .fare-alert-main p { margin-top: 8px; color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45; }
+      .fare-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--border); animation: farePulse 2200ms ease-in-out infinite; }
+      .fare-row:last-child { border-bottom: 0; animation-delay: 600ms; }
+      .fare-row small { color: var(--muted); font-weight: 700; }
+      .fare-row b { color: var(--accent); font-size: 15px; }
+      .itinerary { display: grid; gap: 12px; padding: 18px 16px; }
+      .itinerary-card { display: grid; grid-template-columns: 42px minmax(0, 1fr) auto; align-items: center; gap: 12px; border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; background: #fffdf8; }
+      .dot-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: var(--radius); background: var(--surface-strong); color: var(--accent); }
+      .dot-icon svg { stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .dot-icon svg [fill] { stroke: none; }
+      .itinerary-card b { display: block; font-size: 14px; }
+      .itinerary-card span { color: var(--muted); font-size: 12px; font-weight: 700; }
+      .price { font-weight: 800; }
+
+      .section-head { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 40px; }
+      .section-head p { max-width: 440px; color: var(--muted); font-size: 17px; }
+      .grid { display: grid; gap: 16px; }
+      .why-grid { grid-template-columns: 1.15fr 0.85fr; }
+      .editorial-panel, .signal, .card, .testimonial, .price-card, .faq-item, .stat { border: 1px solid var(--border); border-radius: var(--radius); background: rgba(255, 253, 248, 0.82); }
+      .editorial-panel { padding: 32px; background: var(--surface); }
+      .large-copy { color: #3b332d; font-family: var(--headline); font-size: clamp(28px, 3.2vw, 44px); font-weight: 600; line-height: 1.08; }
+      .signal-list { display: grid; gap: 12px; }
+      .signal { min-height: 112px; padding: 20px; }
+      .signal strong { display: block; font-size: 24px; line-height: 1.1; }
+      .signal span { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; font-weight: 700; }
+      .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .card { min-height: 248px; padding: 24px; }
+      .card p, .testimonial p, .price-card p, .faq-item p { margin-top: 12px; color: var(--muted); }
+      .index { display: flex; width: 36px; height: 36px; align-items: center; justify-content: center; margin-bottom: 22px; border: 1px solid var(--border); border-radius: 50%; color: var(--accent); font-size: 13px; font-weight: 800; }
+      .icon { width: 28px; height: 28px; margin-bottom: 22px; color: var(--accent); stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .proof-band { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(255, 253, 248, 0.48); }
+      .testimonial-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .testimonial { min-height: 284px; padding: 28px; }
+      .quote { color: #3b332d; font-family: var(--headline); font-size: 28px; font-weight: 600; line-height: 1.2; }
+      .person { display: flex; align-items: center; gap: 12px; margin-top: 28px; }
+      .avatar { display: grid; width: 44px; height: 44px; place-items: center; border-radius: 50%; background: var(--surface-strong); color: var(--accent); font-weight: 800; }
+      .person b, .person span { display: block; }
+      .person span { color: var(--muted); font-size: 13px; font-weight: 700; }
+      .stats-row { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; }
+      .stat { padding: 24px; background: var(--surface); }
+      .stat strong { display: block; font-family: var(--headline); font-size: 42px; line-height: 1; }
+      .stat span { display: block; margin-top: 8px; color: var(--muted); font-weight: 700; }
+      .pricing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+      .price-card { position: relative; display: flex; min-height: 456px; flex-direction: column; padding: 28px; }
+      .price-card.recommended { border-color: rgba(143, 47, 36, 0.48); box-shadow: var(--shadow); }
+      .recommended-badge { position: absolute; top: 20px; right: 20px; border-radius: 999px; padding: 7px 10px; background: var(--accent); color: var(--accent-foreground); font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+      .price-card h3 { padding-right: 88px; }
+      .money { margin-top: 24px; font-family: var(--headline); font-size: 48px; line-height: 1; }
+      .money span { color: var(--muted); font-family: var(--body); font-size: 14px; font-weight: 800; }
+      .price-card ul { display: grid; gap: 10px; margin: 24px 0 28px; padding: 0; color: var(--muted); list-style: none; }
+      .price-card li { display: flex; gap: 10px; font-weight: 600; }
+      .price-card li:before { color: var(--success); content: "OK"; font-size: 11px; font-weight: 900; }
+      .price-card .btn { width: 100%; margin-top: auto; }
+      .faq-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .faq-item { min-height: 232px; padding: 24px; }
+      .final { padding: 88px 0; background: var(--text); color: var(--accent-foreground); }
+      .final-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 32px; }
+      .final h2 { color: var(--accent-foreground); }
+      .final p { max-width: 600px; margin-top: 18px; color: rgba(255, 248, 238, 0.74); font-size: 18px; }
+      .final .btn-primary { background: var(--accent-foreground); color: var(--text); box-shadow: none; }
+      footer { border-top: 1px solid rgba(255, 248, 238, 0.12); padding: 28px 0; background: var(--text); color: rgba(255, 248, 238, 0.68); font-size: 13px; font-weight: 700; }
+      .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+
+      @keyframes settle { from { opacity: 0; transform: translateX(var(--phone-x)) translateY(24px) rotate(-1deg); } to { opacity: 1; transform: translateX(var(--phone-x)) translateY(0) rotate(0deg); } }
+      @keyframes farePulse { 0%, 100% { background: transparent; } 45% { background: rgba(143, 47, 36, 0.07); } }
+
+      @media (max-width: 1040px) {
+        .hero-grid, .why-grid, .final-inner { grid-template-columns: 1fr; }
+        .product-wrap { min-height: 628px; }
+        .phone { right: auto; left: 50%; --phone-x: -50%; }
+        .ticket-stack { right: calc(50% - 248px); }
+        .feature-grid, .pricing-grid, .faq-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+
+      @media (max-width: 760px) {
+        .shell { width: min(calc(100% - 28px), var(--max)); }
+        .nav-inner { min-height: 64px; }
+        .nav-links { display: none; }
+        .hero { padding: 48px 0 64px; }
+        h1 { font-size: 52px; }
+        .hero-copy { font-size: 18px; }
+        .hero-proof, .three, .feature-grid, .testimonial-grid, .stats-row, .pricing-grid, .faq-grid { grid-template-columns: 1fr; }
+        .btn { width: 100%; }
+        .section-head { display: grid; }
+        section { padding: 72px 0; }
+        .product-wrap { min-height: 588px; }
+        .phone { left: 50%; width: min(336px, calc(100vw - 44px)); --phone-x: -50%; }
+        .ticket-stack { display: none; }
+        .screen { min-height: 560px; }
+        .fare-alert-main strong { font-size: 38px; }
+        .editorial-panel, .testimonial, .price-card { padding: 24px; }
+        .final { padding: 72px 0; }
+        .footer-inner { display: grid; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *:before, *:after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        .btn:hover { transform: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav" aria-label="Primary navigation">
+      <div class="shell nav-inner">
+        <a class="brand" href="#" aria-label="FareFold home"><span class="brand-mark">F</span><span>FareFold</span></a>
+        <nav class="nav-links" aria-label="Page sections">
+          <a href="#why">Why now</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <a class="btn btn-secondary" href="#pricing">Start free</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="shell hero-grid">
+          <div>
+            <p class="eyebrow">Personal fare renegotiation</p>
+            <h1 id="hero-title">FareFold gets your flight price down after you book.</h1>
+            <p class="hero-copy">Book a flexible fare once. FareFold watches the route, catches eligible price drops, and rebooks the refundable ticket automatically so everyday travelers keep the difference without living in airline tabs.</p>
+            <div class="hero-actions" aria-label="Primary actions">
+              <a class="btn btn-primary" href="#pricing">Start tracking a trip</a>
+              <a class="btn btn-secondary" href="#how">See how it rebooks</a>
+            </div>
+            <div class="hero-proof" aria-label="FareFold momentum">
+              <div class="proof-tile"><strong>$184</strong><span>average saved on trips with a drop</span></div>
+              <div class="proof-tile"><strong>4.7 days</strong><span>typical first reprice window</span></div>
+              <div class="proof-tile"><strong>91%</strong><span>of users keep tracking after trip one</span></div>
+            </div>
+          </div>
+
+          <div class="product-wrap" aria-label="FareFold mobile product preview">
+            <div class="ticket-stack" aria-hidden="true">
+              <div class="ticket-head"><span>Refundable</span><span>Seat 18A</span></div>
+              <div class="ticket-route"><b>SFO</b><span>San Francisco</span><b style="margin-top: 18px">JFK</b><span>New York</span></div>
+            </div>
+            <div class="phone">
+              <div class="screen">
+                <div class="screen-top"><span class="screen-title">FareFold Digest</span><span class="pill">Auto-rebook on</span></div>
+                <div class="fare-alert">
+                  <div class="fare-alert-main"><span>Price drop found</span><strong>Save $216</strong><p>SFO to JFK is now lower on your refundable fare class. Rebooking window closes in 42 minutes.</p></div>
+                  <div class="fare-row"><small>Original fare</small><b>$642</b></div>
+                  <div class="fare-row"><small>New refundable fare</small><b>$426</b></div>
+                </div>
+                <div class="itinerary">
+                  <div class="itinerary-card"><span class="dot-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M2 16l20-8-8 13-3-7-9 2z" fill="currentColor" opacity=".18"></path><path d="M2 16l20-8-8 13-3-7-9 2z"></path></svg></span><span><b>Spring visit</b><span>Apr 24, nonstop</span></span><span class="price">$426</span></div>
+                  <div class="itinerary-card"><span class="dot-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 3v18M5 10h14M7 21h10M7 3h10"></path></svg></span><span><b>Refund status</b><span>Credit returned to card</span></span><span class="price">$216</span></div>
+                  <div class="itinerary-card"><span class="dot-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M20 7l-8 10-4-4-4 5"></path><path d="M15 7h5v5"></path></svg></span><span><b>Next scan</b><span>Watching same cabin</span></span><span class="price">11:30</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="why" aria-labelledby="why-title">
+        <div class="shell">
+          <div class="section-head">
+            <h2 id="why-title">Flights change price. Your booking should keep negotiating.</h2>
+            <p>Flexible fares, volatile demand, and app fatigue have created a simple opening: travelers want the savings without turning vacation planning into a daily chore.</p>
+          </div>
+          <div class="grid why-grid">
+            <div class="editorial-panel"><p class="large-copy">FareFold turns airfare watching into a quiet habit: book refundable, set the guardrails, and let the service move when the same trip gets cheaper.</p></div>
+            <div class="signal-list">
+              <div class="signal"><strong>Daily fare swings</strong><span>Popular routes can change several times between booking and departure.</span></div>
+              <div class="signal"><strong>Flexible fares are mainstream</strong><span>Travelers already pay more for optionality but rarely use it to their advantage.</span></div>
+              <div class="signal"><strong>People want fewer tabs</strong><span>FareFold replaces manual checks with a single digest and automatic action.</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" aria-labelledby="how-title">
+        <div class="shell">
+          <div class="section-head">
+            <h2 id="how-title">The old way leaks money in three familiar places.</h2>
+            <p>FareFold is built for the person who already knows fares move, but does not want another travel chore.</p>
+          </div>
+          <div class="grid three">
+            <article class="card"><span class="index">01</span><h3>You book early, then wonder if you overpaid.</h3><p>FareFold watches the exact route, cabin, and fare rules after checkout, then alerts or rebooks when the math is real.</p></article>
+            <article class="card"><span class="index">02</span><h3>Refundable fares feel useful but expensive.</h3><p>The app turns flexibility into a working asset by using it to move you into a lower eligible fare.</p></article>
+            <article class="card"><span class="index">03</span><h3>Airline policies are too fiddly to babysit.</h3><p>FareFold checks cancellation windows, fare classes, payment returns, and seat impact before it acts.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" aria-labelledby="features-title">
+        <div class="shell">
+          <div class="section-head">
+            <h2 id="features-title">A personal savings loop for every trip.</h2>
+            <p>Each feature is designed to make the next good move obvious, quiet, and reversible.</p>
+          </div>
+          <div class="grid feature-grid">
+            <article class="card"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"></path></svg><h3>Fare heartbeat</h3><p>Continuous scans compare your booked fare against live refundable inventory on the same route.</p></article>
+            <article class="card"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 3v6h-6"></path></svg><h3>Auto rebook guardrails</h3><p>Set minimum savings, seat preferences, cabin rules, and refund timing before FareFold moves.</p></article>
+            <article class="card"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"></path><path d="M4 7h11l-1 4 1 4H4"></path></svg><h3>Policy-aware checks</h3><p>The app reads fare terms before action so a lower sticker price does not create a worse trip.</p></article>
+            <article class="card"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18"></path><path d="M6 7v13h12V7"></path><path d="M9 7V4h6v3"></path></svg><h3>Refund tracker</h3><p>See when money, credits, or holds should land so savings do not disappear into vague airline language.</p></article>
+            <article class="card"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3 10h18"></path><path d="M5 4h14v18H5z"></path></svg><h3>Daily digest</h3><p>A compact morning view shows what changed, what FareFold did, and what still needs your approval.</p></article>
+            <article class="card"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-8 0v2"></path><circle cx="12" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><h3>Family trip mode</h3><p>Track multiple travelers together and avoid rebooking one seat in a way that splits the group.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="proof-band" aria-labelledby="proof-title">
+        <div class="shell">
+          <div class="section-head">
+            <h2 id="proof-title">Built for people who book flights between real life.</h2>
+            <p>Specific wins, quick checks, and enough transparency to trust the next automatic move.</p>
+          </div>
+          <div class="grid testimonial-grid">
+            <article class="testimonial"><p class="quote">"FareFold rebooked our Seattle trip while I was in a meeting. Same seats, same airline, $312 back before lunch."</p><div class="person"><span class="avatar">LM</span><span><b>Lena Morales</b><span>Product lead, Northstar Foods</span></span></div></article>
+            <article class="testimonial"><p class="quote">"I used to check fares every night after buying. Now I read one digest and know whether anything actually changed."</p><div class="person"><span class="avatar">AK</span><span><b>Arjun Kapoor</b><span>Design manager, Haven Studio</span></span></div></article>
+          </div>
+          <div class="grid stats-row" aria-label="Customer proof statistics">
+            <div class="stat"><strong>38k</strong><span>active tracked trips this month</span></div>
+            <div class="stat"><strong>6 min</strong><span>average setup time from booking email</span></div>
+            <div class="stat"><strong>72%</strong><span>weekly digest open rate</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" aria-labelledby="pricing-title">
+        <div class="shell">
+          <div class="section-head">
+            <h2 id="pricing-title">Start free, pay when the habit gets useful.</h2>
+            <p>A consumer-friendly model that makes sense before your first saved dollar and scales for families.</p>
+          </div>
+          <div class="grid pricing-grid">
+            <article class="price-card"><h3>Free Watch</h3><p>For one trip when you want proof that your fare is still fair.</p><div class="money">$0 <span>/ trip</span></div><ul><li>Track one refundable itinerary</li><li>Daily fare-drop digest</li><li>Manual rebook instructions</li><li>Refund window reminders</li></ul><a class="btn btn-secondary" href="#final">Try free</a></article>
+            <article class="price-card recommended"><span class="recommended-badge">Recommended</span><h3>Personal</h3><p>For frequent personal travel and automatic rebooking within your rules.</p><div class="money">$9 <span>/ month</span></div><ul><li>Unlimited active trips</li><li>Automatic eligible rebooking</li><li>Seat and cabin guardrails</li><li>Refund and credit tracking</li><li>Priority drop alerts</li></ul><a class="btn btn-primary" href="#final">Start Personal</a></article>
+            <article class="price-card"><h3>Family</h3><p>For households coordinating several travelers, school breaks, and visits home.</p><div class="money">$16 <span>/ month</span></div><ul><li>Six traveler profiles</li><li>Group-seat protection</li><li>Shared digest and approvals</li><li>Family refund timeline</li><li>Concierge policy review</li></ul><a class="btn btn-secondary" href="#final">Choose Family</a></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" aria-labelledby="faq-title">
+        <div class="shell">
+          <div class="section-head">
+            <h2 id="faq-title">Questions worth asking before you let an app rebook.</h2>
+            <p>Short answers to the practical concerns that matter most.</p>
+          </div>
+          <div class="grid faq-grid">
+            <article class="faq-item"><h3>Does FareFold book the first ticket?</h3><p>Yes, when you choose a refundable fare through FareFold. You can also forward an eligible booking email to start tracking.</p></article>
+            <article class="faq-item"><h3>Will it change my seat or cabin?</h3><p>Only inside the guardrails you set. If a lower fare risks your cabin, seat, or group, FareFold asks first.</p></article>
+            <article class="faq-item"><h3>What if the airline gives credit instead of cash?</h3><p>The refund tracker shows the expected return method before rebooking so you can decide if the savings are worth it.</p></article>
+            <article class="faq-item"><h3>How does FareFold make money?</h3><p>Premium subscriptions. FareFold does not hide fees inside the fare or push flights that are worse for you.</p></article>
+            <article class="faq-item"><h3>Can it guarantee savings?</h3><p>No. It guarantees disciplined watching and eligible action. When fares do drop, it helps you move before the window closes.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="final" class="final" aria-labelledby="final-title">
+        <div class="shell final-inner">
+          <div>
+            <h2 id="final-title">Let your next flight keep earning after checkout.</h2>
+            <p>Start with one refundable itinerary and see every price move without refreshing another booking site.</p>
+          </div>
+          <a class="btn btn-primary" href="mailto:hello@farefold.example?subject=Start%20tracking%20my%20trip">Start tracking</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell footer-inner">
+        <span>(c) 2026 FareFold. Flight prices, renegotiated.</span>
+        <span>Built for refundable fares, clear rules, and fewer travel chores.</span>
+      </div>
+    </footer>
+  </body>
+</html>

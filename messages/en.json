@@ -2,12 +2,12 @@
   "PRICING": "Pricing",
   "Blog": {
     "title": "Blog",
-    "meta_title": "Blog - KyronHQ",
-    "meta_description": "Read our latest news and updates."
+    "meta_title": "Blog - FareFold",
+    "meta_description": "Read our latest travel pricing notes."
   },
   "Docs": {
     "title": "Documentation",
-    "meta_title": "Documentation - KyronHQ",
-    "meta_description": "Learn how to use KyronHQ."
+    "meta_title": "Documentation - FareFold",
+    "meta_description": "Learn how FareFold works."
   }
 }

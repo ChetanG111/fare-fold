@@ -95,7 +95,7 @@
 
 :root {
   --radius: 0.625rem;
-  --grid-line-color: #E4E4E7;
+  --grid-line-color: #e4e4e7;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -186,5 +186,86 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  body {
+    background:
+      linear-gradient(90deg, rgba(33, 27, 23, 0.035) 1px, transparent 1px) 0 0 / 64px 64px,
+      linear-gradient(180deg, #fffaf2 0%, #fbf7f0 34%, #f7f0e6 100%);
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    outline: 3px solid rgba(143, 47, 36, 0.4);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    letter-spacing: 0;
+  }
+}
+
+@layer utilities {
+  .farefold-shell {
+    width: min(calc(100% - 40px), 1184px);
+    margin-inline: auto;
+  }
+
+  .farefold-heading {
+    font-family: var(--font-heading), Georgia, serif;
+    letter-spacing: 0;
+  }
+
+  .farefold-card {
+    border: 1px solid #ded3c5;
+    border-radius: 8px;
+    background: rgba(255, 253, 248, 0.82);
+  }
+
+  .farefold-shadow {
+    box-shadow: 0 24px 70px rgba(64, 44, 30, 0.12);
+  }
+}
+
+@keyframes farefold-settle {
+  from {
+    opacity: 0;
+    transform: translateX(var(--phone-x, 0)) translateY(24px) rotate(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(var(--phone-x, 0)) translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes farefold-fare-pulse {
+  0%,
+  100% {
+    background: transparent;
+  }
+  45% {
+    background: rgba(143, 47, 36, 0.07);
+  }
+}
+
+@media (max-width: 760px) {
+  .farefold-shell {
+    width: min(calc(100% - 28px), 1184px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }

@@ -186,10 +186,43 @@ export const notification = pgTable('notification', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 
+// Flight Tracking Tables
+export const trackedFlight = pgTable('tracked_flight', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id').references(() => user.id, { onDelete: 'cascade' }).notNull(),
+  origin: text('origin').notNull(),
+  destination: text('destination').notNull(),
+  departureDate: timestamp('departure_date').notNull(),
+  status: text('status').default('tracking').notNull(), // 'tracking', 'rebooked', 'canceled'
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().$onUpdate(() => new Date()).notNull(),
+})
+
+export const flightBooking = pgTable('flight_booking', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  trackedFlightId: text('tracked_flight_id').references(() => trackedFlight.id, { onDelete: 'cascade' }).notNull(),
+  airline: text('airline').notNull(),
+  flightNumber: text('flight_number'),
+  price: decimal('price', { precision: 10, scale: 2 }).notNull(),
+  currency: text('currency').default('USD').notNull(),
+  status: text('status').default('active').notNull(), // 'active', 'replaced', 'canceled'
+  bookingReference: text('booking_reference'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+export const priceHistory = pgTable('price_history', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  trackedFlightId: text('tracked_flight_id').references(() => trackedFlight.id, { onDelete: 'cascade' }).notNull(),
+  price: decimal('price', { precision: 10, scale: 2 }).notNull(),
+  currency: text('currency').default('USD').notNull(),
+  checkedAt: timestamp('checked_at').defaultNow().notNull(),
+})
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
   notifications: many(notification),
+  trackedFlights: many(trackedFlight),
 }))
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -256,3 +289,27 @@ export const notificationRelations = relations(notification, ({ one }) => ({
     references: [user.id],
   }),
 }))
+
+export const trackedFlightRelations = relations(trackedFlight, ({ one, many }) => ({
+  user: one(user, {
+    fields: [trackedFlight.userId],
+    references: [user.id],
+  }),
+  bookings: many(flightBooking),
+  priceHistory: many(priceHistory),
+}))
+
+export const flightBookingRelations = relations(flightBooking, ({ one }) => ({
+  trackedFlight: one(trackedFlight, {
+    fields: [flightBooking.trackedFlightId],
+    references: [trackedFlight.id],
+  }),
+}))
+
+export const priceHistoryRelations = relations(priceHistory, ({ one }) => ({
+  trackedFlight: one(trackedFlight, {
+    fields: [priceHistory.trackedFlightId],
+    references: [trackedFlight.id],
+  }),
+}))
+

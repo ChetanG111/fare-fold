@@ -32,8 +32,13 @@ export async function searchAndBookFlight(flightRequest: any) {
 
     console.log('Amadeus API response:', response.data);
 
-    // TODO: Implement booking logic
-    // For now, we just return the first flight offer
+    if (!response.data || response.data.length === 0) {
+      return {
+        success: false,
+        error: 'No flights found matching your criteria.'
+      };
+    }
+
     const flightOffer = response.data[0];
 
     return {

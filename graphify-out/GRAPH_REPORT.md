@@ -1,11 +1,12 @@
-# Graph Report - .  (2026-04-19)
+# Graph Report - P:\fare-fold  (2026-04-19)
 
 ## Corpus Check
-- Large corpus: 220 files · ~92,635 words. Semantic extraction will be expensive (many Claude tokens). Consider running on a subfolder, or use --no-semantic to run AST-only.
+- 182 files · ~127,647 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 422 nodes · 388 edges · 141 communities detected
-- Extraction: 85% EXTRACTED · 15% INFERRED · 0% AMBIGUOUS · INFERRED: 58 edges (avg confidence: 0.8)
+- 443 nodes · 416 edges · 142 communities detected
+- Extraction: 84% EXTRACTED · 16% INFERRED · 0% AMBIGUOUS · INFERRED: 65 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -150,60 +151,61 @@
 - [[_COMMUNITY_Community 138|Community 138]]
 - [[_COMMUNITY_Community 139|Community 139]]
 - [[_COMMUNITY_Community 140|Community 140]]
+- [[_COMMUNITY_Community 141|Community 141]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `StorageClient` - 13 edges
-2. `cn()` - 12 edges
-3. `DodoPaymentsAdapter` - 11 edges
-4. `LemonSqueezyAdapter` - 11 edges
-5. `PolarAdapter` - 11 edges
-6. `StripeAdapter` - 11 edges
-7. `POST()` - 9 edges
-8. `getAbsoluteUrl()` - 7 edges
-9. `getConfiguredProvider()` - 7 edges
-10. `sendEmail()` - 7 edges
+1. `POST()` - 13 edges
+2. `StorageClient` - 13 edges
+3. `cn()` - 12 edges
+4. `DodoPaymentsAdapter` - 11 edges
+5. `LemonSqueezyAdapter` - 11 edges
+6. `PolarAdapter` - 11 edges
+7. `StripeAdapter` - 11 edges
+8. `GET()` - 10 edges
+9. `getSession()` - 7 edges
+10. `getAbsoluteUrl()` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `manifest()` --calls--> `getBrandConfig()`  [INFERRED]
   app\manifest.ts → config\branding.ts
 - `NotFound()` --calls--> `useBrandConfig()`  [INFERRED]
   app\not-found.tsx → config\branding.ts
-- `submitFeedback()` --calls--> `GET()`  [INFERRED]
-  app\actions\operations.ts → app\api\sentry-example-api\route.ts
-- `POST()` --calls--> `GET()`  [INFERRED]
-  app\api\webhooks\payments\route.ts → app\api\sentry-example-api\route.ts
-- `validateEmailField()` --calls--> `quickValidateEmail()`  [INFERRED]
-  app\[locale]\(auth)\login\login-form.tsx → lib\messaging\email\validation.ts
+- `markNotificationRead()` --calls--> `getSession()`  [INFERRED]
+  app\actions\operations.ts → P:\fare-fold\app\api\fare-fold\route.ts
+- `GET()` --calls--> `searchAirports()`  [INFERRED]
+  app\api\sentry-example-api\route.ts → P:\fare-fold\lib\fare-fold\service.ts
+- `GET()` --calls--> `handleSubmit()`  [INFERRED]
+  app\api\sentry-example-api\route.ts → app\[locale]\(auth)\register\register-form.tsx
 
 ## Communities
 
 ### Community 0 - "Community 0"
+Cohesion: 0.07
+Nodes (16): AdminLayout(), MainLayout(), markNotificationRead(), submitFeedback(), GET(), getSession(), POST(), SentryExampleAPIError (+8 more)
+
+### Community 1 - "Community 1"
 Cohesion: 0.16
 Nodes (16): getConfiguredProviders(), getFirstAvailableProvider(), getProvider(), hasRealProvider(), createLogProvider(), getActiveProviderName(), getConfiguredProvider(), hasEmailService() (+8 more)
 
-### Community 1 - "Community 1"
+### Community 2 - "Community 2"
 Cohesion: 0.13
 Nodes (12): Badge(), Button(), Card(), CardAction(), CardDescription(), CardFooter(), CardHeader(), CardPanel() (+4 more)
 
-### Community 2 - "Community 2"
-Cohesion: 0.15
-Nodes (5): POST(), getActivePaymentProvider(), getPaymentAdapter(), isPaymentSystemConfigured(), StripeAdapter
-
 ### Community 3 - "Community 3"
-Cohesion: 0.13
-Nodes (2): LemonSqueezyAdapter, getPriceConfig()
+Cohesion: 0.16
+Nodes (12): validateEmailField(), handleEmailChange(), handlePasswordChange(), handleSubmit(), validateEmailField(), validatePassword(), checkMXRecord(), hasInvalidPatterns() (+4 more)
 
 ### Community 4 - "Community 4"
+Cohesion: 0.13
+Nodes (2): DodoPaymentsAdapter, getPriceConfig()
+
+### Community 5 - "Community 5"
 Cohesion: 0.21
 Nodes (2): fetchWithTimeout(), StorageClient
 
-### Community 5 - "Community 5"
+### Community 6 - "Community 6"
 Cohesion: 0.18
 Nodes (13): createNodemailerProvider(), getTransporter(), send(), sendBatch(), createPlunkProvider(), getClient(), send(), createPostmarkProvider() (+5 more)
-
-### Community 6 - "Community 6"
-Cohesion: 0.17
-Nodes (8): submitFeedback(), handleEmailChange(), handlePasswordChange(), handleSubmit(), validateEmailField(), validatePassword(), GET(), SentryExampleAPIError
 
 ### Community 7 - "Community 7"
 Cohesion: 0.2
@@ -214,24 +216,24 @@ Cohesion: 0.17
 Nodes (7): getBrandConfig(), useBrandConfig(), EmailLayout(), manifest(), getEmailSubject(), ThemeProvider(), getBaseUrl()
 
 ### Community 9 - "Community 9"
-Cohesion: 0.24
-Nodes (7): validateEmailField(), checkMXRecord(), hasInvalidPatterns(), isDisposableEmail(), quickValidateEmail(), validateEmail(), validateEmailSyntax()
-
-### Community 10 - "Community 10"
 Cohesion: 0.33
 Nodes (8): generateMetadata(), getAbsoluteUrl(), getArticleSchema(), getBlogSchema(), getOpenGraph(), getOrganizationSchema(), getTwitterCard(), normalizeCanonicalPath()
 
-### Community 11 - "Community 11"
+### Community 10 - "Community 10"
 Cohesion: 0.25
-Nodes (1): DodoPaymentsAdapter
+Nodes (1): LemonSqueezyAdapter
 
-### Community 12 - "Community 12"
+### Community 11 - "Community 11"
 Cohesion: 0.25
 Nodes (1): PolarAdapter
 
-### Community 13 - "Community 13"
+### Community 12 - "Community 12"
 Cohesion: 0.33
 Nodes (3): getOAuthProviderStatus(), LoginPage(), RegisterPage()
+
+### Community 13 - "Community 13"
+Cohesion: 0.4
+Nodes (2): fetchTrackedFlights(), handleSearch()
 
 ### Community 14 - "Community 14"
 Cohesion: 0.33
@@ -290,7 +292,7 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 28 - "Community 28"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 29 - "Community 29"
@@ -741,58 +743,60 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 141 - "Community 141"
+Cohesion: 1.0
+Nodes (0): 
+
 ## Knowledge Gaps
-- **Thin community `Community 28`** (2 nodes): `register()`, `instrumentation.ts`
+- **Thin community `Community 29`** (2 nodes): `register()`, `instrumentation.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `middleware()`, `middleware.ts`
+- **Thin community `Community 30`** (2 nodes): `middleware()`, `middleware.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (2 nodes): `global-error.tsx`, `GlobalError()`
+- **Thin community `Community 31`** (2 nodes): `global-error.tsx`, `GlobalError()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (2 nodes): `premium-purchase.ts`, `saveCommunityInfo()`
+- **Thin community `Community 32`** (2 nodes): `premium-purchase.ts`, `saveCommunityInfo()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (2 nodes): `layout.tsx`, `RootLayout()`
+- **Thin community `Community 33`** (2 nodes): `layout.tsx`, `RootLayout()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (2 nodes): `page.tsx`, `Page()`
+- **Thin community `Community 34`** (2 nodes): `page.tsx`, `Page()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (2 nodes): `layout.tsx`, `AuthLayout()`
+- **Thin community `Community 35`** (2 nodes): `layout.tsx`, `AuthLayout()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (2 nodes): `auth-background.tsx`, `AuthBackground()`
+- **Thin community `Community 36`** (2 nodes): `auth-background.tsx`, `AuthBackground()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (2 nodes): `social-login-buttons.tsx`, `SocialLoginButtons()`
+- **Thin community `Community 37`** (2 nodes): `social-login-buttons.tsx`, `SocialLoginButtons()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (2 nodes): `page.tsx`, `VerifyPage()`
+- **Thin community `Community 38`** (2 nodes): `page.tsx`, `VerifyPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (2 nodes): `use-verification.ts`, `useVerification()`
+- **Thin community `Community 39`** (2 nodes): `use-verification.ts`, `useVerification()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (2 nodes): `verify-content.tsx`, `handleResend()`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (2 nodes): `layout.tsx`, `MainLayout()`
+- **Thin community `Community 40`** (2 nodes): `verify-content.tsx`, `handleResend()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 41`** (2 nodes): `page.tsx`, `DashboardPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 42`** (2 nodes): `bottom-nav.tsx`, `BottomNav()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (2 nodes): `cta.tsx`, `CTA()`
+- **Thin community `Community 43`** (2 nodes): `CTA()`, `cta.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 44`** (2 nodes): `faq.tsx`, `FAQ()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 45`** (2 nodes): `footer.tsx`, `Footer()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (2 nodes): `layout.tsx`, `AdminLayout()`
+- **Thin community `Community 46`** (2 nodes): `page.tsx`, `AdminDashboardPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (2 nodes): `page.tsx`, `AdminDashboardPage()`
+- **Thin community `Community 47`** (2 nodes): `page.tsx`, `LicensesPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (2 nodes): `page.tsx`, `LicensesPage()`
+- **Thin community `Community 48`** (2 nodes): `page.tsx`, `PrivacyPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (2 nodes): `page.tsx`, `PrivacyPage()`
+- **Thin community `Community 49`** (2 nodes): `page.tsx`, `TermsPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (2 nodes): `page.tsx`, `TermsPage()`
+- **Thin community `Community 50`** (2 nodes): `language-switcher.tsx`, `handleLocaleChange()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (2 nodes): `language-switcher.tsx`, `handleLocaleChange()`
+- **Thin community `Community 51`** (2 nodes): `AdminSidebar()`, `admin-sidebar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (2 nodes): `AdminSidebar()`, `admin-sidebar.tsx`
+- **Thin community `Community 52`** (2 nodes): `otp-verification-email.tsx`, `getSubjectByType()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (2 nodes): `otp-verification-email.tsx`, `getSubjectByType()`
+- **Thin community `Community 53`** (2 nodes): `Calendar()`, `calendar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 54`** (2 nodes): `CheckboxGroup()`, `checkbox-group.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -968,19 +972,23 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 140`** (1 nodes): `index.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 141`** (1 nodes): `fix_env.ps1`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `getPriceConfig()` connect `Community 3` to `Community 2`?**
-  _High betweenness centrality (0.023) - this node is a cross-community bridge._
-- **Why does `GET()` connect `Community 6` to `Community 2`, `Community 12`?**
-  _High betweenness centrality (0.022) - this node is a cross-community bridge._
-- **Why does `POST()` connect `Community 2` to `Community 6`?**
-  _High betweenness centrality (0.021) - this node is a cross-community bridge._
+- **Why does `GET()` connect `Community 0` to `Community 11`, `Community 3`?**
+  _High betweenness centrality (0.025) - this node is a cross-community bridge._
+- **Why does `getPriceConfig()` connect `Community 4` to `Community 0`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Are the 8 inferred relationships involving `POST()` (e.g. with `searchAndBookFlight()` and `startPriceSimulator()`) actually correct?**
+  _`POST()` has 8 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 11 inferred relationships involving `cn()` (e.g. with `Badge()` and `Button()`) actually correct?**
   _`cn()` has 11 INFERRED edges - model-reasoned connections that need verification._
-- **Should `Community 1` be split into smaller, more focused modules?**
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.07 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.13 - nodes in this community are weakly interconnected._
-- **Should `Community 3` be split into smaller, more focused modules?**
+- **Should `Community 4` be split into smaller, more focused modules?**
   _Cohesion score 0.13 - nodes in this community are weakly interconnected._

@@ -14,7 +14,7 @@ import {
   AutocompleteItem, 
   AutocompleteEmpty 
 } from '@/components/ui/autocomplete'
-import { format } from 'date-fns'
+import { format, startOfToday } from 'date-fns'
 import { Calendar as CalendarIcon, Loader2, PlaneTakeoff, PlaneLanding, History, TrendingDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -272,6 +272,7 @@ export function Dashboard() {
                     mode="single"
                     selected={departureDate}
                     onSelect={setDepartureDate}
+                    disabled={(date) => date < startOfToday()}
                     initialFocus
                   />
                 </PopoverContent>

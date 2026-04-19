@@ -9,7 +9,7 @@ The Fare-Fold agent is designed as a modular, scalable system composed of severa
 The system consists of the following core components:
 
 *   **User-Facing API:** A public API that allows users to submit flight requests, manage their tracked flights, and view their savings. This API will be the primary interface for the Fare-Fold web and mobile applications.
-*   **Flight Search & Booking Service:** This service is responsible for interacting with third-party flight search APIs (e.g., Skyscanner, Amadeus, Google Flights) to find and book refundable fares.
+*   **Flight Search & Booking Service:** This service is responsible for interacting with third-party flight search APIs (e.g., Duffel) to find and book refundable fares.
 *   **Price Monitoring Service:** This service continuously monitors the prices of the flights that users are tracking. It periodically queries the flight search APIs to get the latest prices.
 *   **Rebooking Service:** When the Price Monitoring Service detects a significant price drop, it triggers the Rebooking Service. This service handles the process of canceling the original flight and rebooking it at the lower price.
 *   **Notification Service:** This service is responsible for sending notifications to users about the status of their tracked flights, including successful rebookings and savings.

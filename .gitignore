@@ -45,3 +45,7 @@ opencode.json
 # Sentry Config File
 .env.sentry-build-plugin
 /graphify-out/
+
+.env
+.env.local
+.env.example

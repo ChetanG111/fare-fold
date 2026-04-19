@@ -1,0 +1,13 @@
+{
+  "PRICING": "Pricing",
+  "Blog": {
+    "title": "Blog",
+    "meta_title": "Blog - KyronHQ",
+    "meta_description": "Read our latest news and updates."
+  },
+  "Docs": {
+    "title": "Documentation",
+    "meta_title": "Documentation - KyronHQ",
+    "meta_description": "Learn how to use KyronHQ."
+  }
+}

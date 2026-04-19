@@ -42,7 +42,7 @@ export default function Navbar() {
 
         <div className='flex items-center gap-2'>
           <Link
-            href='/#pricing'
+            href='/dashboard'
             className='hidden min-h-12 items-center justify-center rounded-[8px] border border-[#ded3c5] bg-[#fffdf8]/75 px-5 text-sm font-extrabold transition hover:-translate-y-0.5 hover:bg-[#fffdf8] md:inline-flex'
           >
             Start free
@@ -73,7 +73,7 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href='/#pricing'
+              href='/dashboard'
               onClick={() => setIsMenuOpen(false)}
               className='mt-2 inline-flex min-h-12 items-center justify-center rounded-[8px] bg-[#8f2f24] px-5 font-extrabold text-[#fff8ee]'
             >

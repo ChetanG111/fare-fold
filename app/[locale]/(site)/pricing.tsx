@@ -93,7 +93,7 @@ export default function Pricing() {
                 ))}
               </ul>
               <Link
-                href='/#final'
+                href='/dashboard'
                 className={`mt-auto inline-flex min-h-12 w-full items-center justify-center rounded-[8px] px-5 font-extrabold transition hover:-translate-y-0.5 ${
                   plan.featured
                     ? 'bg-[#8f2f24] text-[#fff8ee] shadow-[0_12px_28px_rgba(143,47,36,0.2)]'

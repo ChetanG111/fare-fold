@@ -25,7 +25,7 @@ export default function Hero() {
           </p>
           <div className='mt-8 flex flex-wrap gap-3'>
             <Link
-              href='/#pricing'
+              href='/dashboard'
               className='inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-[#8f2f24] px-5 font-extrabold text-[#fff8ee] shadow-[0_12px_28px_rgba(143,47,36,0.2)] transition hover:-translate-y-0.5 max-sm:w-full'
             >
               Start tracking a trip

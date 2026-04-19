@@ -15,7 +15,7 @@ export default function CTA() {
           </p>
         </div>
         <Link
-          href='mailto:chetangonuguntla0@gmail.com?subject=Start%20tracking%20my%20trip'
+          href='/dashboard'
           className='inline-flex min-h-12 items-center justify-center gap-2 rounded-[8px] bg-[#fff8ee] px-5 font-extrabold text-[#211b17] transition hover:-translate-y-0.5 max-sm:w-full'
         >
           Start tracking

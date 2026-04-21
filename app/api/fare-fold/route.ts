@@ -1,25 +1,15 @@
 import { NextResponse } from 'next/server'
-import { headers } from 'next/headers'
-import { auth } from '@/lib/auth/auth'
 import { db } from '@/database'
 import * as schema from '@/database/schema'
 import { searchAndBookFlight, startPriceSimulator } from '@/lib/fare-fold/service'
 import { mockDb } from '@/lib/fare-fold/mock-db'
+import { getUnifiedSession } from '@/lib/auth/unified-session'
 
 const IS_MOCK_MODE = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true'
 
-async function getSession() {
-  if (IS_MOCK_MODE) {
-    return { user: { id: 'mock-user-123', email: 'mock@example.com', name: 'Mock User' } }
-  }
-  return await auth.api.getSession({
-    headers: await headers(),
-  })
-}
-
 export async function POST(request: Request) {
   try {
-    const session = await getSession()
+    const session = await getUnifiedSession()
 
     if (!session) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
@@ -104,7 +94,7 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const session = await getSession()
+    const session = await getUnifiedSession()
 
     if (!session) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })

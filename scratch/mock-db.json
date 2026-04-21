@@ -1,0 +1,96 @@
+{
+  "trackedFlights": [
+    {
+      "userId": "mock-user-123",
+      "origin": "HYD",
+      "destination": "KUL",
+      "departureDate": "2026-04-21T00:00:00.000Z",
+      "status": "rebooked",
+      "id": "mock-flight-otjg929",
+      "createdAt": "2026-04-19T09:40:11.255Z",
+      "updatedAt": "2026-04-19T09:40:30.438Z"
+    },
+    {
+      "userId": "mock-user-123",
+      "origin": "COU",
+      "destination": "BOM",
+      "departureDate": "2026-04-30T00:00:00.000Z",
+      "status": "rebooked",
+      "id": "mock-flight-s1iz1ga",
+      "createdAt": "2026-04-19T09:43:54.662Z",
+      "updatedAt": "2026-04-19T09:44:12.438Z"
+    }
+  ],
+  "bookings": [
+    {
+      "trackedFlightId": "mock-flight-otjg929",
+      "airline": "AA",
+      "flightNumber": "123",
+      "price": "615.46",
+      "currency": "USD",
+      "status": "cancelled",
+      "id": "mock-booking-6my6erz",
+      "createdAt": "2026-04-19T09:40:11.257Z"
+    },
+    {
+      "trackedFlightId": "mock-flight-otjg929",
+      "airline": "AA",
+      "flightNumber": "123",
+      "price": "535.49",
+      "currency": "USD",
+      "status": "active",
+      "id": "mock-booking-8z5ashs",
+      "createdAt": "2026-04-19T09:40:30.436Z"
+    },
+    {
+      "trackedFlightId": "mock-flight-s1iz1ga",
+      "airline": "AA",
+      "flightNumber": "123",
+      "price": "346.37",
+      "currency": "USD",
+      "status": "cancelled",
+      "id": "mock-booking-locnlr3",
+      "createdAt": "2026-04-19T09:43:54.664Z"
+    },
+    {
+      "trackedFlightId": "mock-flight-s1iz1ga",
+      "airline": "AA",
+      "flightNumber": "123",
+      "price": "255.17",
+      "currency": "USD",
+      "status": "active",
+      "id": "mock-booking-67nbajd",
+      "createdAt": "2026-04-19T09:44:12.436Z"
+    }
+  ],
+  "prices": [
+    {
+      "trackedFlightId": "mock-flight-otjg929",
+      "price": "615.46",
+      "currency": "USD",
+      "id": "mock-price-0v7ljik",
+      "timestamp": "2026-04-19T09:40:11.263Z"
+    },
+    {
+      "trackedFlightId": "mock-flight-otjg929",
+      "price": "535.49",
+      "currency": "USD",
+      "id": "mock-price-jcpoino",
+      "timestamp": "2026-04-19T09:40:30.439Z"
+    },
+    {
+      "trackedFlightId": "mock-flight-s1iz1ga",
+      "price": "346.37",
+      "currency": "USD",
+      "id": "mock-price-ecz4ivn",
+      "timestamp": "2026-04-19T09:43:54.667Z"
+    },
+    {
+      "trackedFlightId": "mock-flight-s1iz1ga",
+      "price": "255.17",
+      "currency": "USD",
+      "id": "mock-price-9zeahju",
+      "timestamp": "2026-04-19T09:44:12.439Z"
+    }
+  ]
+}

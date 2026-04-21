@@ -4,6 +4,9 @@ import { type ReactNode, useEffect, useState } from 'react'
 import { GitHubIcon, GoogleIcon, MicrosoftIcon, FacebookIcon } from './icons'
 import { Button } from '@/components/ui/button'
 import { client } from '@/lib/auth/auth-client'
+import { auth } from '@/lib/firebase/client'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { setFirebaseSession } from '@/app/actions/auth-actions'
 
 interface SocialLoginButtonsProps {
   githubAvailable: boolean
@@ -12,6 +15,7 @@ interface SocialLoginButtonsProps {
   facebookAvailable: boolean
   callbackURL?: string
   isProduction: boolean
+  firebaseGoogleAvailable?: boolean
   children?: ReactNode
 }
 
@@ -20,6 +24,7 @@ export function SocialLoginButtons({
   googleAvailable,
   microsoftAvailable,
   facebookAvailable,
+  firebaseGoogleAvailable = true,
   callbackURL = '/dashboard',
   children,
 }: SocialLoginButtonsProps) {
@@ -27,6 +32,7 @@ export function SocialLoginButtons({
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const [isMicrosoftLoading, setIsMicrosoftLoading] = useState(false)
   const [isFacebookLoading, setIsFacebookLoading] = useState(false)
+  const [isFirebaseLoading, setIsFirebaseLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   // Set mounted state to true on client-side
@@ -80,6 +86,28 @@ export function SocialLoginButtons({
       }
     } finally {
       setIsGoogleLoading(false)
+    }
+  }
+
+  async function signInWithFirebaseGoogle() {
+    if (!firebaseGoogleAvailable) return
+
+    setIsFirebaseLoading(true)
+    try {
+      const provider = new GoogleAuthProvider()
+      const result = await signInWithPopup(auth, provider)
+      // Successfully signed in with Firebase. You can either handle the ID token here 
+      // or redirect to the callback URL.
+      if (result.user) {
+        const idToken = await result.user.getIdToken()
+        await setFirebaseSession(idToken)
+        window.location.href = callbackURL
+      }
+    } catch (err: any) {
+      console.error("Firebase Sign In Error:", err)
+      // Handle Firebase errors here if needed
+    } finally {
+      setIsFirebaseLoading(false)
     }
   }
 
@@ -155,6 +183,19 @@ export function SocialLoginButtons({
     </Button>
   )
 
+  const firebaseGoogleButton = (
+    <Button
+      variant='outline'
+      size='lg'
+      className='w-full hover:bg-gray-50'
+      disabled={!firebaseGoogleAvailable || isFirebaseLoading}
+      onClick={signInWithFirebaseGoogle}
+    >
+      <GoogleIcon className='h-[18px]! w-[18px]! mr-1' />
+      {isFirebaseLoading ? 'Connecting...' : 'Google'}
+    </Button>
+  )
+
   const microsoftButton = (
     <Button
       variant='outline'
@@ -181,7 +222,7 @@ export function SocialLoginButtons({
     </Button>
   )
 
-  const hasAnyOAuthProvider = githubAvailable || googleAvailable
+  const hasAnyOAuthProvider = githubAvailable || googleAvailable || firebaseGoogleAvailable
 
   if (!hasAnyOAuthProvider && !children) {
     return null
@@ -189,7 +230,7 @@ export function SocialLoginButtons({
 
   return (
     <div className={`grid gap-3 font-light`}>
-      {googleAvailable && googleButton}
+      {firebaseGoogleAvailable && firebaseGoogleButton}
       {githubAvailable && githubButton}
       {microsoftAvailable && microsoftButton}
       {facebookAvailable && facebookButton}

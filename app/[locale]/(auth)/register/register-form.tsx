@@ -12,6 +12,9 @@ import { client } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/utils'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 import { SocialLoginButtons } from '../components/social-login-buttons'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { auth } from '@/lib/firebase/client'
+import { setFirebaseSession } from '@/app/actions/auth-actions'
 
 const validateEmailField = (emailValue: string): string[] => {
   const errors: string[] = []
@@ -161,33 +164,37 @@ export default function RegisterForm({
     }
 
     try {
-      const response = await client.signUp.email(
-        {
-          email: emailValue,
-          password: passwordValue,
-          name: nameValue,
-        },
-        {}
-      )
-
-      if (!response || response.error) {
-        setIsLoading(false)
-        return
+      const userCredential = await createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+      
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, { displayName: nameValue })
+        const idToken = await userCredential.user.getIdToken()
+        await setFirebaseSession(idToken)
       }
 
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('verificationEmail', emailValue)
-      }
+      router.push('/dashboard')
+    } catch (error: any) {
+      console.error('Firebase Signup error:', error)
+      const errorMessage: string[] = []
 
-      router.push('/verify?fromSignup=true')
-    } catch (error) {
-      console.error('Signup error:', error)
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage.push('An account with this email already exists.')
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage.push('Password is too weak. Please choose a stronger password.')
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage.push('Network error. Please check your connection.')
+      } else {
+        errorMessage.push(error.message || 'An error occurred during sign up.')
+      }
+      
+      setEmailErrors(errorMessage)
+      setShowEmailValidationError(true)
     } finally {
       setIsLoading(false)
     }
   }
 
-  const hasSocial = githubAvailable || googleAvailable || facebookAvailable || microsoftAvailable
+  const hasSocial = githubAvailable || googleAvailable || facebookAvailable || microsoftAvailable || true
   const showDivider = hasSocial
 
   return (

@@ -21,6 +21,9 @@ import { client } from '@/lib/auth/auth-client'
 import { cn, getBaseUrl } from '@/lib/utils'
 import { quickValidateEmail } from '@/lib/messaging/email/validation'
 import { SocialLoginButtons } from '../components/social-login-buttons'
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth'
+import { auth } from '@/lib/firebase/client'
+import { setFirebaseSession } from '@/app/actions/auth-actions'
 
 const validateEmailField = (emailValue: string): string[] => {
   const errors: string[] = []
@@ -195,75 +198,29 @@ export default function LoginPage({
     try {
       const safeCallbackUrl = validateCallbackUrl(callbackUrl) ? callbackUrl : '/dashboard'
 
-      const result = await client.signIn.email(
-        {
-          email,
-          password,
-          callbackURL: safeCallbackUrl,
-        },
-        {
-          onError: (ctx) => {
-            console.error('Login error:', ctx.error)
-            const errorMessage: string[] = ['Invalid email or password']
-
-            if (ctx.error.code?.includes('EMAIL_NOT_VERIFIED')) {
-              return
-            }
-            if (
-              ctx.error.code?.includes('BAD_REQUEST') ||
-              ctx.error.message?.includes('Email and password sign in is not enabled')
-            ) {
-              errorMessage.push('Email sign in is currently disabled.')
-            } else if (
-              ctx.error.code?.includes('INVALID_CREDENTIALS') ||
-              ctx.error.message?.includes('invalid password')
-            ) {
-              errorMessage.push('Invalid email or password. Please try again.')
-            } else if (
-              ctx.error.code?.includes('USER_NOT_FOUND') ||
-              ctx.error.message?.includes('not found')
-            ) {
-              errorMessage.push('No account found with this email. Please sign up first.')
-            } else if (ctx.error.code?.includes('MISSING_CREDENTIALS')) {
-              errorMessage.push('Please enter both email and password.')
-            } else if (ctx.error.code?.includes('EMAIL_PASSWORD_DISABLED')) {
-              errorMessage.push('Email and password login is disabled.')
-            } else if (ctx.error.code?.includes('FAILED_TO_CREATE_SESSION')) {
-              errorMessage.push('Failed to create session. Please try again later.')
-            } else if (ctx.error.code?.includes('too many attempts')) {
-              errorMessage.push(
-                'Too many login attempts. Please try again later or reset your password.'
-              )
-            } else if (ctx.error.code?.includes('account locked')) {
-              errorMessage.push(
-                'Your account has been locked for security. Please reset your password.'
-              )
-            } else if (ctx.error.code?.includes('network')) {
-              errorMessage.push('Network error. Please check your connection and try again.')
-            } else if (ctx.error.message?.includes('rate limit')) {
-              errorMessage.push('Too many requests. Please wait a moment before trying again.')
-            }
-
-            setPasswordErrors(errorMessage)
-            setShowValidationError(true)
-          },
-        }
-      )
-
-      if (!result || result.error) {
-        setIsLoading(false)
-        return
-      }
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      
+      // Successfully signed in with Firebase.
+      const idToken = await userCredential.user.getIdToken()
+      await setFirebaseSession(idToken)
+      
+      window.location.href = safeCallbackUrl
     } catch (err: any) {
-      if (err.message?.includes('not verified') || err.code?.includes('EMAIL_NOT_VERIFIED')) {
-        if (typeof window !== 'undefined') {
-          sessionStorage.setItem('verificationEmail', email)
-        }
-        router.push('/verify')
-        return
+      console.error('Firebase Login error:', err)
+      const errorMessage: string[] = ['Invalid email or password']
+
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+        errorMessage.push('Invalid email or password. Please try again.')
+      } else if (err.code === 'auth/too-many-requests') {
+        errorMessage.push('Too many login attempts. Please try again later.')
+      } else if (err.code === 'auth/network-request-failed') {
+        errorMessage.push('Network error. Please check your connection and try again.')
+      } else {
+        errorMessage.push(err.message || 'An error occurred during sign in.')
       }
 
-      console.error('Uncaught login error:', err)
+      setPasswordErrors(errorMessage)
+      setShowValidationError(true)
     } finally {
       setIsLoading(false)
     }
@@ -291,37 +248,7 @@ export default function LoginPage({
       setIsSubmittingReset(true)
       setResetStatus({ type: null, message: '' })
 
-      const response = await fetch('/api/auth/forget-password', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: forgotPasswordEmail,
-          redirectTo: `${getBaseUrl()}/reset-password`,
-        }),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        let errorMessage = errorData.message || 'Failed to request password reset'
-
-        if (
-          errorMessage.includes('Invalid body parameters') ||
-          errorMessage.includes('invalid email')
-        ) {
-          errorMessage = 'Please enter a valid email address'
-        } else if (errorMessage.includes('Email is required')) {
-          errorMessage = 'Please enter your email address'
-        } else if (
-          errorMessage.includes('user not found') ||
-          errorMessage.includes('User not found')
-        ) {
-          errorMessage = 'No account found with this email address'
-        }
-
-        throw new Error(errorMessage)
-      }
+      await sendPasswordResetEmail(auth, forgotPasswordEmail)
 
       setResetStatus({
         type: 'success',
@@ -343,7 +270,7 @@ export default function LoginPage({
     }
   }
 
-  const hasSocial = githubAvailable || googleAvailable
+  const hasSocial = githubAvailable || googleAvailable || true
   const showDivider = hasSocial
 
   return (

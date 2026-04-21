@@ -11,7 +11,24 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+let app;
+let auth: any = null;
+
+if (typeof window !== 'undefined') {
+  if (firebaseConfig.apiKey) {
+    app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    auth = getAuth(app);
+    (auth as any).isConfigured = true;
+  } else {
+    console.warn('Firebase Client NOT initialized - missing NEXT_PUBLIC_FIREBASE_API_KEY');
+    // Export a dummy object that doesn't crash on 'app' access
+    auth = new Proxy({}, {
+      get: (target, prop) => {
+        if (prop === 'isConfigured') return false;
+        return undefined;
+      }
+    });
+  }
+}
 
 export { app, auth };

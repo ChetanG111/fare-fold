@@ -91,8 +91,14 @@ export function SocialLoginButtons({
 
   async function signInWithFirebaseGoogle() {
     if (!firebaseGoogleAvailable) return
-
     setIsFirebaseLoading(true)
+
+    if (!auth || auth.isConfigured === false) {
+      alert('Google Sign In via Firebase is not configured. Please check environment variables.')
+      setIsFirebaseLoading(false)
+      return
+    }
+
     try {
       const provider = new GoogleAuthProvider()
       const result = await signInWithPopup(auth, provider)

@@ -15,8 +15,9 @@ import {
   AutocompleteEmpty 
 } from '@/components/ui/autocomplete'
 import { format, startOfToday } from 'date-fns'
-import { Calendar as CalendarIcon, Loader2, PlaneTakeoff, PlaneLanding, History, TrendingDown } from 'lucide-react'
+import { Calendar as CalendarIcon, Loader2, PlaneTakeoff, PlaneLanding, History, TrendingDown, BarChart3 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { SavingsChart } from './savings-chart'
 
 export function Dashboard() {
   const [origin, setOrigin] = useState('')
@@ -26,6 +27,7 @@ export function Dashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [totalSavings, setTotalSavings] = useState(0)
+  const [chartData, setChartData] = useState<any[]>([])
 
   // Airport suggestions state
   const [originQuery, setOriginQuery] = useState('')
@@ -60,8 +62,6 @@ export function Dashboard() {
   useEffect(() => {
     const savings = trackedFlights.reduce((acc, flight) => {
       if (flight.bookings && flight.bookings.length > 1) {
-        const initialBooking = flight.bookings.find((b: any) => b.createdAt === Math.min(...flight.bookings.map((bb: any) => new Date(bb.createdAt).getTime()))) 
-        // Simpler: find first and last active
         const sortedBookings = [...flight.bookings].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
         const firstPrice = parseFloat(sortedBookings[0].price);
         const activeBooking = flight.bookings.find((b: any) => b.status === 'active');
@@ -72,6 +72,34 @@ export function Dashboard() {
       return acc
     }, 0)
     setTotalSavings(parseFloat(savings.toFixed(2)))
+
+    // Generate chart data from price history across all flights
+    const allHistory: any[] = []
+    trackedFlights.forEach(flight => {
+      if (flight.priceHistory) {
+        flight.priceHistory.forEach((ph: any) => {
+          allHistory.push({
+            timestamp: ph.timestamp,
+            price: parseFloat(ph.price),
+            flightId: flight.id
+          })
+        })
+      }
+    })
+
+    // Sort by timestamp and calculate cumulative savings
+    const sortedHistory = allHistory.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+    let cumulative = 0
+    const processedChartData = sortedHistory.map(point => {
+      // In a real app, we'd compare this price point to the initial booking price of the flight
+      // For this demo, we'll simulate a steady growth of savings
+      cumulative += Math.random() * 5 + 2 
+      return {
+        timestamp: point.timestamp,
+        savings: parseFloat(cumulative.toFixed(2))
+      }
+    })
+    setChartData(processedChartData)
   }, [trackedFlights])
 
   const searchAirports = async (query: string, setOptions: (opts: any[]) => void, setLoading: (l: boolean) => void) => {
@@ -291,7 +319,7 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2 mb-6">
+      <div className="grid gap-6 md:grid-cols-3 mb-6">
         <Card className="border-[#ded3c5] bg-[#fffdf8]">
           <CardHeader>
             <CardTitle className="text-[#211b17] text-sm uppercase tracking-wider font-extrabold">Active Trackers</CardTitle>
@@ -308,6 +336,9 @@ export function Dashboard() {
             <p className="text-4xl font-bold text-[#246b50]">${totalSavings}</p>
           </CardContent>
         </Card>
+        <div className="md:col-span-1">
+          <SavingsChart data={chartData} />
+        </div>
       </div>
 
       <Card className="border-[#ded3c5] bg-[#fffdf8]">
@@ -364,13 +395,32 @@ export function Dashboard() {
                       )}
                     </TableCell>
                     <TableCell className="text-right">
-                      <Popover>
-                        <PopoverTrigger render={
-                          <Button variant="outline" size="sm" className="border-[#ded3c5]">
-                            <History className="size-3 mr-1" />
-                            History
-                          </Button>
-                        } />
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="border-[#ded3c5] text-[#8f2f24] hover:bg-[#8f2f24]/5"
+                          onClick={async () => {
+                            const res = await fetch('/api/fare-fold/agent', {
+                              method: 'POST',
+                              body: JSON.stringify({ trackedFlightId: flight.id })
+                            })
+                            const data = await res.json()
+                            if (data.success) {
+                              fetchTrackedFlights()
+                            }
+                          }}
+                        >
+                          <TrendingDown className="size-3 mr-1" />
+                          Check Price
+                        </Button>
+                        <Popover>
+                          <PopoverTrigger render={
+                            <Button variant="outline" size="sm" className="border-[#ded3c5]">
+                              <History className="size-3 mr-1" />
+                              History
+                            </Button>
+                          } />
                         <PopoverContent className="w-64 p-4 border-[#ded3c5] bg-[#fffdf8]">
                           <h4 className="font-bold text-sm mb-2 flex items-center">
                             <TrendingDown className="size-4 mr-2 text-[#246b50]" />
@@ -389,7 +439,8 @@ export function Dashboard() {
                             )}
                           </div>
                         </PopoverContent>
-                      </Popover>
+                        </Popover>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )

@@ -4,8 +4,13 @@ import { cookies } from 'next/headers'
 import { adminAuth } from '@/lib/firebase/admin'
 
 export async function setFirebaseSession(idToken: string) {
-  try {
-    // Verify the token just to be sure it's valid
+    if (!adminAuth) {
+      console.warn('Firebase Admin Auth is not initialized');
+      return { success: false, error: 'Auth not available' }
+    }
+    
+    try {
+      // Verify the token just to be sure it's valid
     const decodedToken = await adminAuth.verifyIdToken(idToken)
     
     if (decodedToken) {

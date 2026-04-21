@@ -28,7 +28,7 @@ export async function getUnifiedSession() {
   const cookieStore = await cookies()
   const sessionCookie = cookieStore.get('firebase-session')?.value
 
-  if (sessionCookie) {
+  if (sessionCookie && adminAuth) {
     try {
       const decodedToken = await adminAuth.verifySessionCookie(sessionCookie)
       return {

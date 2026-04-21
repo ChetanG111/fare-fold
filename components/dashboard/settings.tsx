@@ -117,14 +117,26 @@ export function Settings({ user }: SettingsProps) {
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between py-2 border-b border-[#ded3c5]/30">
-                  <span className="text-sm">Price Drop Alerts</span>
-                  <div className="h-5 w-9 bg-[#8f2f24] rounded-full relative">
+                  <div className="space-y-0.5">
+                    <span className="text-sm block">Price Drop Alerts</span>
+                    <span className="text-[10px] text-muted-foreground uppercase font-bold">Email Notifications</span>
+                  </div>
+                  <div className="h-5 w-9 bg-[#8f2f24] rounded-full relative cursor-pointer">
                     <div className="absolute right-0.5 top-0.5 size-4 bg-white rounded-full" />
                   </div>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-[#ded3c5]/30">
+                  <div className="space-y-0.5">
+                    <span className="text-sm block">Automatic Rebooking</span>
+                    <span className="text-[10px] text-[#8f2f24] uppercase font-bold">Pro Feature</span>
+                  </div>
+                  <div className="h-5 w-9 bg-[#ded3c5] rounded-full relative cursor-pointer">
+                    <div className="absolute left-0.5 top-0.5 size-4 bg-white rounded-full" />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between py-2">
                   <span className="text-sm">Marketing Emails</span>
-                  <div className="h-5 w-9 bg-[#ded3c5] rounded-full relative">
+                  <div className="h-5 w-9 bg-[#ded3c5] rounded-full relative cursor-pointer">
                     <div className="absolute left-0.5 top-0.5 size-4 bg-white rounded-full" />
                   </div>
                 </div>

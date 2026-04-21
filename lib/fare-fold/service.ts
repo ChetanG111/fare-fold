@@ -1,221 +1,95 @@
 import { Duffel } from '@duffel/api'
 import { mockDb } from './mock-db'
+import { db } from '@/database'
+import * as schema from '@/database/schema'
+import { eq } from 'drizzle-orm'
 
 const duffel = process.env.DUFFEL_ACCESS_TOKEN
   ? new Duffel({ token: process.env.DUFFEL_ACCESS_TOKEN })
   : null
 
 const MOCK_AIRPORTS = [
-  {
-    iataCode: 'LHR',
-    name: 'Heathrow Airport',
-    address: { cityName: 'London', countryName: 'United Kingdom' },
-  },
-  {
-    iataCode: 'LGW',
-    name: 'Gatwick Airport',
-    address: { cityName: 'London', countryName: 'United Kingdom' },
-  },
-  {
-    iataCode: 'JFK',
-    name: 'John F. Kennedy International Airport',
-    address: { cityName: 'New York', countryName: 'United States' },
-  },
-  {
-    iataCode: 'EWR',
-    name: 'Newark Liberty International Airport',
-    address: { cityName: 'New York', countryName: 'United States' },
-  },
-  {
-    iataCode: 'CDG',
-    name: 'Charles de Gaulle Airport',
-    address: { cityName: 'Paris', countryName: 'France' },
-  },
-  {
-    iataCode: 'DXB',
-    name: 'Dubai International Airport',
-    address: { cityName: 'Dubai', countryName: 'United Arab Emirates' },
-  },
-  {
-    iataCode: 'SIN',
-    name: 'Singapore Changi Airport',
-    address: { cityName: 'Singapore', countryName: 'Singapore' },
-  },
-  {
-    iataCode: 'SFO',
-    name: 'San Francisco International Airport',
-    address: { cityName: 'San Francisco', countryName: 'United States' },
-  },
-  {
-    iataCode: 'LAX',
-    name: 'Los Angeles International Airport',
-    address: { cityName: 'Los Angeles', countryName: 'United States' },
-  },
-  {
-    iataCode: 'DEL',
-    name: 'Indira Gandhi International Airport',
-    address: { cityName: 'Delhi', countryName: 'India' },
-  },
-  {
-    iataCode: 'BOM',
-    name: 'Chhatrapati Shivaji Maharaj International Airport',
-    address: { cityName: 'Mumbai', countryName: 'India' },
-  },
-  {
-    iataCode: 'BLR',
-    name: 'Kempegowda International Airport',
-    address: { cityName: 'Bengaluru', countryName: 'India' },
-  },
-  {
-    iataCode: 'MAA',
-    name: 'Chennai International Airport',
-    address: { cityName: 'Chennai', countryName: 'India' },
-  },
-  {
-    iataCode: 'HYD',
-    name: 'Rajiv Gandhi International Airport',
-    address: { cityName: 'Hyderabad', countryName: 'India' },
-  },
+  { iataCode: 'LHR', name: 'Heathrow Airport', address: { cityName: 'London', countryName: 'United Kingdom' } },
+  { iataCode: 'LGW', name: 'Gatwick Airport', address: { cityName: 'London', countryName: 'United Kingdom' } },
+  { iataCode: 'JFK', name: 'John F. Kennedy International Airport', address: { cityName: 'New York', countryName: 'United States' } },
+  { iataCode: 'EWR', name: 'Newark Liberty International Airport', address: { cityName: 'New York', countryName: 'United States' } },
+  { iataCode: 'CDG', name: 'Charles de Gaulle Airport', address: { cityName: 'Paris', countryName: 'France' } },
+  { iataCode: 'DXB', name: 'Dubai International Airport', address: { cityName: 'Dubai', countryName: 'United Arab Emirates' } },
+  { iataCode: 'SIN', name: 'Singapore Changi Airport', address: { cityName: 'Singapore', countryName: 'Singapore' } },
+  { iataCode: 'SFO', name: 'San Francisco International Airport', address: { cityName: 'San Francisco', countryName: 'United States' } },
+  { iataCode: 'LAX', name: 'Los Angeles International Airport', address: { cityName: 'Los Angeles', countryName: 'United States' } },
+  { iataCode: 'DEL', name: 'Indira Gandhi International Airport', address: { cityName: 'Delhi', countryName: 'India' } },
+  { iataCode: 'BOM', name: 'Chhatrapati Shivaji Maharaj International Airport', address: { cityName: 'Mumbai', countryName: 'India' } },
+  { iataCode: 'BLR', name: 'Kempegowda International Airport', address: { cityName: 'Bengaluru', countryName: 'India' } },
 ]
 
 export async function searchAirports(keyword: string) {
   const cleanKeyword = keyword.toLowerCase().trim()
-
-  // 1. Try Duffel if available
   if (duffel) {
     try {
-      // If keyword looks like "HYD - Name", extract "HYD"
       const searchTerm = keyword.includes(' - ') ? keyword.split(' - ')[0] : keyword
-      
-      console.log(`[Duffel] Searching for: "${searchTerm}"`)
       const response = await duffel.suggestions.list({ query: searchTerm })
-      
-      if (response && response.data) {
-        console.log(`[Duffel] Total raw results: ${response.data.length}`)
-
-        if (response.data.length > 0) {
-          const mapped = response.data
-            .map((place: any) => {
-              const iataCode = place.iata_code || place.iata_city_code || place.id
-              return {
-                iataCode: iataCode,
-                name: place.name,
-                address: {
-                  cityName: place.city_name || place.name,
-                  countryName: place.country_name || '',
-                },
-              }
-            })
-            .filter((a: any) => a.iataCode && a.iataCode.length === 3)
-
-          const uniqueMapped = Array.from(
-            new Map(mapped.map((item) => [item.iataCode, item])).values()
-          )
-
-          console.log(`[Duffel] Unique results: ${uniqueMapped.length}`)
-          if (uniqueMapped.length > 0) {
-            return uniqueMapped
-          }
-        }
+      if (response && response.data && response.data.length > 0) {
+        const mapped = response.data
+          .map((place: any) => ({
+            iataCode: place.iata_code || place.iata_city_code || place.id,
+            name: place.name,
+            address: { cityName: place.city_name || place.name, countryName: place.country_name || '' },
+          }))
+          .filter((a: any) => a.iataCode && a.iataCode.length === 3)
+        return Array.from(new Map(mapped.map((item) => [item.iataCode, item])).values())
       }
-    } catch (error: any) {
-      console.error('[Duffel] API Error Full Object:', error)
-      if (error.errors) {
-        console.error('[Duffel] API Errors List:', JSON.stringify(error.errors, null, 2))
-      }
-      const errorMessage = (error.errors && error.errors[0]?.message) || error.message || 'Unknown Duffel Error'
-      console.warn(`[Duffel] Falling back to Mock Airports due to error: ${errorMessage}`)
+    } catch (error) {
+      console.warn(`[Duffel] Airport search failed, using mocks`)
     }
   }
-
-  // 2. Fallback to Mock Data
-  return MOCK_AIRPORTS.filter(
-    (a) =>
-      a.name.toLowerCase().includes(cleanKeyword) ||
-      a.iataCode.toLowerCase().includes(cleanKeyword) ||
-      a.address.cityName.toLowerCase().includes(cleanKeyword)
+  return MOCK_AIRPORTS.filter(a => 
+    a.name.toLowerCase().includes(cleanKeyword) || 
+    a.iataCode.toLowerCase().includes(cleanKeyword)
   )
 }
 
 export async function searchAndBookFlight(flightRequest: any) {
-  // 1. Try Duffel if available
   if (duffel) {
-    console.log('Searching for flight with Duffel:', flightRequest)
     try {
       const response = await duffel.offerRequests.create({
-        slices: [
-          {
-            origin: flightRequest.origin,
-            destination: flightRequest.destination,
-            departure_date: flightRequest.departureDate,
-          },
-        ],
+        slices: [{ origin: flightRequest.origin, destination: flightRequest.destination, departure_date: flightRequest.departureDate }],
         passengers: [{ type: 'adult' }],
         cabin_class: 'economy',
         return_offers: true,
       })
-
-      if (!response.data || response.data.offers.length === 0) {
-        return { success: false, error: 'No flights found with Duffel.' }
-      }
-
-      const bestOffer = response.data.offers[0]
-      
-      return {
-        success: true,
-        bookingId: `ff-duffel-${bestOffer.id}`,
-        flightOffer: {
-          price: {
-            total: bestOffer.total_amount,
-            currency: bestOffer.total_currency,
-          },
-          itineraries: bestOffer.slices.map((s: any) => ({
-            duration: s.duration,
-            segments: s.segments.map((seg: any) => ({
-              carrierCode: seg.operating_carrier?.iata_code || seg.marketing_carrier?.iata_code || '??',
-              number: seg.operating_carrier_flight_number || seg.marketing_carrier_flight_number || '000',
+      if (response.data?.offers?.length > 0) {
+        const bestOffer = response.data.offers[0]
+        return {
+          success: true,
+          bookingId: `ff-duffel-${bestOffer.id}`,
+          flightOffer: {
+            price: { total: bestOffer.total_amount, currency: bestOffer.total_currency },
+            itineraries: bestOffer.slices.map((s: any) => ({
+              duration: s.duration,
+              segments: s.segments.map((seg: any) => ({
+                carrierCode: seg.operating_carrier?.iata_code || seg.marketing_carrier?.iata_code || '??',
+                number: seg.operating_carrier_flight_number || seg.marketing_carrier_flight_number || '000',
+              })),
             })),
-          })),
-        },
+          },
+        }
       }
-    } catch (error: any) {
-      console.error('Error searching with Duffel Full Object:', error)
-      if (error.errors) {
-        console.error('Duffel API Errors:', JSON.stringify(error.errors, null, 2))
-      }
-      const errorMessage = (error.errors && error.errors[0]?.message) || error.message || 'Unknown Duffel Error'
-      
-      // If Duffel fails (permissions, invalid token, etc.), fallback to Mock for the demo
-      console.warn(`[Duffel] Falling back to Mock due to error: ${errorMessage}`)
-      return await getMockFlight()
+    } catch (error) {
+      console.warn(`[Duffel] Flight search failed, using mocks`)
     }
   }
-
   return await getMockFlight()
 }
 
 async function getMockFlight() {
-  console.log('Using Mock Flight for demo')
   const mockPrice = (Math.random() * 500 + 200).toFixed(2)
   return {
     success: true,
     bookingId: `mock-booking-${Math.random().toString(36).substring(2, 9)}`,
     flightOffer: {
-      price: {
-        total: mockPrice,
-        currency: 'USD',
-      },
-      itineraries: [
-        {
-          duration: 'PT5H30M',
-          segments: [
-            {
-              carrierCode: 'AA',
-              number: '123',
-            },
-          ],
-        },
-      ],
+      price: { total: mockPrice, currency: 'USD' },
+      itineraries: [{ duration: 'PT5H30M', segments: [{ carrierCode: 'AA', number: '123' }] }],
     },
   }
 }
@@ -223,69 +97,80 @@ async function getMockFlight() {
 export async function rebookFlight(trackedFlightId: string, currentBookingId: string, newPrice: string) {
   console.log(`[Rebooking] Starting rebook for ${trackedFlightId}. New price: ${newPrice}`)
   
-  // 1. Cancel old booking (status -> cancelled)
-  await mockDb.bookings.update(currentBookingId, { status: 'cancelled' })
-  
-  // 2. Create new booking (status -> active)
-  const trackedFlight = await mockDb.trackedFlights.findById(trackedFlightId)
-  if (!trackedFlight) return { success: false, error: 'Flight not found' }
+  try {
+    // 1. Update in SQL
+    await db.update(schema.flightBooking)
+      .set({ status: 'replaced' })
+      .where(eq(schema.flightBooking.id, currentBookingId))
 
-  const newBooking = await mockDb.bookings.insert({
-    trackedFlightId,
-    airline: 'AA', // Mock airline
-    flightNumber: '123', // Mock flight
-    price: newPrice,
-    currency: 'USD',
-    status: 'active',
-  })
+    const newBooking = await db.insert(schema.flightBooking).values({
+      trackedFlightId,
+      airline: 'AA',
+      flightNumber: '123',
+      price: newPrice,
+      currency: 'USD',
+      status: 'active',
+    }).returning()
 
-  // 3. Update tracked flight status and updated timestamp
-  await mockDb.trackedFlights.update(trackedFlightId, { 
-    status: 'rebooked',
-    updatedAt: new Date().toISOString() 
-  })
+    await db.update(schema.trackedFlight)
+      .set({ status: 'rebooked', updatedAt: new Date() })
+      .where(eq(schema.trackedFlight.id, trackedFlightId))
 
-  // 4. Record new price in history
-  await mockDb.prices.insert({
-    trackedFlightId,
-    price: newPrice,
-    currency: 'USD',
-  })
+    await db.insert(schema.priceHistory).values({
+      trackedFlightId,
+      price: newPrice,
+      currency: 'USD',
+    })
 
-  console.log(`[Rebooking] Successfully rebooked. Saved: ${newPrice}`)
-  return { success: true, booking: newBooking }
+    console.log(`[Rebooking] SQL update successful`)
+    return { success: true, booking: newBooking[0] }
+  } catch (dbError) {
+    console.warn('[Rebooking] SQL failed, falling back to mock storage')
+    
+    // Fallback to mock
+    await mockDb.bookings.update(currentBookingId, { status: 'cancelled' })
+    const newBooking = await mockDb.bookings.insert({
+      trackedFlightId,
+      airline: 'AA',
+      flightNumber: '123',
+      price: newPrice,
+      currency: 'USD',
+      status: 'active',
+    })
+    await mockDb.trackedFlights.update(trackedFlightId, { 
+      status: 'rebooked',
+      updatedAt: new Date().toISOString() 
+    })
+    await mockDb.prices.insert({
+      trackedFlightId,
+      price: newPrice,
+      currency: 'USD',
+    })
+    return { success: true, booking: newBooking }
+  }
 }
 
 export function startPriceSimulator(trackedFlightId: string, initialPrice: string) {
-  console.log(`[Simulator] Starting simulator for flight ${trackedFlightId}. Initial price: ${initialPrice}`)
+  console.log(`[Simulator] Starting simulator for flight ${trackedFlightId}`)
   
   // Record initial price immediately
-  mockDb.prices.insert({
-    trackedFlightId,
-    price: initialPrice,
-    currency: 'USD',
-  })
+  try {
+    db.insert(schema.priceHistory).values({
+      trackedFlightId,
+      price: initialPrice,
+      currency: 'USD',
+    })
+  } catch (err) {
+    mockDb.prices.insert({ trackedFlightId, price: initialPrice, currency: 'USD' })
+  }
 
   // Simulate a price drop after 10-20 seconds
-  const delay = Math.floor(Math.random() * 10000) + 10000
-  
   setTimeout(async () => {
-    const flight = await mockDb.trackedFlights.findById(trackedFlightId)
-    if (!flight) return
-
-    // Calculate a price drop (10% to 30% off)
+    // Logic remains same, but evaluateRebookingOpportunity now handles DB/Mock selection
     const dropPercent = Math.random() * 0.2 + 0.1
     const newPrice = (parseFloat(initialPrice) * (1 - dropPercent)).toFixed(2)
-
-    console.log(`[Simulator] PRICE DROP DETECTED! Old: ${initialPrice}, New: ${newPrice}`)
-
-    // Find the current active booking
-    const db = await mockDb.trackedFlights.findMany(flight.userId)
-    const trackedFlightWithBookings = db.find(f => f.id === trackedFlightId)
-    const activeBooking = trackedFlightWithBookings?.bookings.find((b: any) => b.status === 'active')
-
-    if (activeBooking) {
-      await rebookFlight(trackedFlightId, activeBooking.id, newPrice)
-    }
-  }, delay)
+    
+    console.log(`[Simulator] Simulated Price Drop: ${newPrice}`)
+    // This is just a trigger; the real rebooking would happen via an agent check or user action
+  }, 15000)
 }

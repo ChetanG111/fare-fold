@@ -89,14 +89,32 @@ export function Dashboard() {
 
     // Sort by timestamp and calculate cumulative savings
     const sortedHistory = allHistory.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
-    let cumulative = 0
+    
+    // Track current best price for each flight to calculate cumulative savings over time
+    const currentBestPrices: Record<string, number> = {}
+    const initialPrices: Record<string, number> = {}
+    
     const processedChartData = sortedHistory.map(point => {
-      // In a real app, we'd compare this price point to the initial booking price of the flight
-      // For this demo, we'll simulate a steady growth of savings
-      cumulative += Math.random() * 5 + 2 
+      if (!initialPrices[point.flightId]) {
+        initialPrices[point.flightId] = point.price
+      }
+      
+      const prevBest = currentBestPrices[point.flightId] || initialPrices[point.flightId]
+      if (point.price < prevBest) {
+        currentBestPrices[point.flightId] = point.price
+      }
+
+      // Total savings is the sum of (Initial - CurrentBest) across all flights at this point in time
+      let totalSavedAtPoint = 0
+      Object.keys(initialPrices).forEach(fid => {
+        const initial = initialPrices[fid]
+        const best = currentBestPrices[fid] || initial
+        totalSavedAtPoint += Math.max(0, initial - best)
+      })
+
       return {
         timestamp: point.timestamp,
-        savings: parseFloat(cumulative.toFixed(2))
+        savings: parseFloat(totalSavedAtPoint.toFixed(2))
       }
     })
     setChartData(processedChartData)

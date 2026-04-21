@@ -46,6 +46,9 @@ export async function POST(request: Request) {
           });
         }
 
+        // Start Price Simulator for the demo
+        startPriceSimulator(newTrackedFlight.id, result.flightOffer.price.total)
+
         return NextResponse.json({ 
           message: 'Flight tracked successfully', 
           bookingId: result.bookingId, 

@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { LogOut, User, Bell, Shield, CreditCard, ChevronRight } from 'lucide-react'
+import { LogOut, User, Bell, Shield, ChevronLeft, ChevronRight } from 'lucide-react'
 import { signOut } from '@/lib/auth/auth-client'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { removeFirebaseSession } from '@/app/actions/auth-actions'
 
 interface SettingsProps {
@@ -51,7 +52,16 @@ export function Settings({ user }: SettingsProps) {
 
   return (
     <div className="container mx-auto py-10 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 text-[#211b17]">Settings</h1>
+      <div className="flex items-center gap-4 mb-8">
+        <Link 
+          href="/dashboard" 
+          className="p-2 hover:bg-muted rounded-full transition-colors border border-border/40"
+          title="Back to Dashboard"
+        >
+          <ChevronLeft className="size-5" />
+        </Link>
+        <h1 className="text-3xl font-bold text-[#211b17]">Settings</h1>
+      </div>
 
       <div className="grid gap-8">
         {/* Profile Section */}
